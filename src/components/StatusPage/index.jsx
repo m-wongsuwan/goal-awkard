@@ -13,10 +13,6 @@ function StatusPage() {
         return <GoalCard goal={goal} key={index} />
     })
 
-    // const firstGoal = goals[0]._document.data.value.mapValue.fields
-
-    // console.log(firstGoal.goalTitle.stringValue)
-
     return (
         <>
             <h1>Status Page</h1>

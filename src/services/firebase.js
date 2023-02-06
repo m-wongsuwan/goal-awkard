@@ -69,7 +69,10 @@ function getGoals(uid, callback) {
             collection(db, 'users', uid, 'goals'),
         ),
         (querySnapshot) => {
-            const goals = querySnapshot.docs;
+            const goals = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data()
+            }));
             callback(goals)
         }
     )
