@@ -9,8 +9,8 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField'
 import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
+// import Select from '@mui/material/Select';
+// import MenuItem from '@mui/material/MenuItem';
 import RadioGroup from '@mui/material/RadioGroup'
 import Radio from '@mui/material/Radio'
 import FormControlLabel from '@mui/material/FormControlLabel'
@@ -21,16 +21,18 @@ function AddGoalForm() {
 
     const initInputs = {
         goalTitle: "",
-        secretType: "text",
+        // secretType: "text",
         checkinFrequency: "weekly",
         secretText: "",
         shareWith: "",
-        shareWithContactType: "none",
+        // shareWithContactType: "none",
         shareWithEmail: "",
-        shareWithText: '',
-        phoneCarrier: 'att',
+        // shareWithText: '',
+        // phoneCarrier: 'att',
         paused: false,
-        shared: false
+        shared: false,
+        date: '',
+        checkinDueDate: ''
     }
     const [inputs, setInputs] = React.useState(initInputs)
 
@@ -43,7 +45,24 @@ function AddGoalForm() {
     }
 
     function submit() {
-        const inputsWithDate = {...inputs, date: new Date()}
+        const currentDate = new Date()
+        
+        function returnDueDate(frequency) {
+            if (frequency === 'monthly') {
+                return new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000)
+            } else if (frequency === 'daily') {
+                return new Date(currentDate.getTime() + 1  * 24 * 60 * 60 * 1000)
+            } else {
+                return new Date(currentDate.getTime() + 7  * 24 * 60 * 60 * 1000)
+            }
+
+        }
+
+        const inputsWithDate = {
+            ...inputs,
+            date: new Date(),
+            checkinDueDate: returnDueDate(inputs.checkinFrequency)
+        }
 
         submitGoal(user.uid, inputsWithDate)
         setInputs(initInputs)
@@ -72,7 +91,7 @@ function AddGoalForm() {
                     submit()}
                 }
             >
-                <InputLabel id="demo-simple-select-label">Goal Title</InputLabel>
+                <InputLabel id="goalTitle">Goal Title</InputLabel>
                 <TextField 
                     margin='normal'
                     required
@@ -85,7 +104,7 @@ function AddGoalForm() {
                     autoFocus
                 />
 
-                <InputLabel>Secret Type</InputLabel>
+                {/* <InputLabel>Secret Type</InputLabel>
                 <Select
                     id="secretType"
                     value={inputs.secretType}
@@ -95,28 +114,29 @@ function AddGoalForm() {
                     onChange={handleChange}
                 >
                     <MenuItem value={"none"}>Select Type</MenuItem>
-                    <MenuItem value={"text"}>Text</MenuItem>
+                    <MenuItem value={"text"}>Text Only</MenuItem>
                     <MenuItem value={"file"}>File</MenuItem>
-                </Select>
+                </Select> */}
 
-                {inputs.secretType === "text" ? 
-                    <>
-                        <InputLabel>Secret Text</InputLabel>
-                        <TextField 
-                            margin='normal'
-                            required
-                            fullWidth
-                            multiline
-                            id='secretText'
-                            label="Type your secret"
-                            name='secretText'
-                            value={inputs.secretText}
-                            onChange={handleChange}                            
-                        />
-                    </>
+                
+                <InputLabel>Secret Description</InputLabel>
+                <TextField 
+                    margin='normal'
+                    required
+                    fullWidth
+                    multiline
+                    id='secretText'
+                    label="What is your secret shame?"
+                    name='secretText'
+                    value={inputs.secretText}
+                    onChange={handleChange}                            
+                />
+                    
+                {/* Going with MVP of text secrets over email
+                {inputs.secretType === "file" ? 
+                    <h1>this will appear if the input type is File</h1> 
                     : null
-                }
-                {inputs.secretType === "file" ? <h1>this will appear if the input type is File</h1> : null}
+                } */}
                 
                 <Typography component='p' variant='p'>Who should we share your secret with if you don't follow through with your goal?</Typography>
                 <TextField 
@@ -130,6 +150,8 @@ function AddGoalForm() {
                     onChange={handleChange}
                 />
 
+                {/* Choosing MVP of send to email
+                
                 <InputLabel>How should we get in touch with them?</InputLabel>
                 <Select
                     id="shareWithContactType"
@@ -142,26 +164,26 @@ function AddGoalForm() {
                     <MenuItem value={"none"}>Select Type</MenuItem>
                     <MenuItem value={"email"}>Email</MenuItem>
                     <MenuItem value={"text"}>Text</MenuItem>
-                </Select>
+                </Select> */}
 
-                {inputs.shareWithContactType === "email" ? 
-                    <>
-                        <InputLabel>Secret Receiver Email</InputLabel>
-                        <TextField 
-                            margin='normal'
-                            required
-                            fullWidth
-                            multiline
-                            id='shareWithEmail'
-                            label="Secret Receiver Email"
-                            name='shareWithEmail'
-                            value={inputs.shareWithEmail}
-                            onChange={handleChange}                            
-                        />
-                    </>
-                    : null
-                }
-                {inputs.shareWithContactType === "text" ? 
+                
+                    
+                <InputLabel>Secret Receiver Email</InputLabel>
+                <TextField 
+                    margin='normal'
+                    required
+                    fullWidth
+                    multiline
+                    id='shareWithEmail'
+                    label="Secret Receiver Email"
+                    name='shareWithEmail'
+                    value={inputs.shareWithEmail}
+                    onChange={handleChange}                            
+                />
+                    
+
+                {/* Not necessary for MVP of send secret to email
+                inputs.shareWithContactType === "text" ? 
                     <>
                         <TextField 
                             margin='normal'
@@ -191,7 +213,7 @@ function AddGoalForm() {
                     </>
                     
                     : null
-                }
+                */}
 
                 <InputLabel>Check In Frequency</InputLabel>
                     <RadioGroup

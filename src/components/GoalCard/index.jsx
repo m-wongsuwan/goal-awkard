@@ -1,18 +1,42 @@
 import React from "react";
 
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+
 function GoalCard(props) {
     const goal = props.goal
-    console.log(goal.date.toDate().getFullYear())
-    console.log(goal.date.toDate().getMonth())
+    //don't delete this
+    console.log(new Date (goal.date.seconds * 1000 ))
+
+    const goalSetDate = new Date (goal.date.seconds * 1000 )
+
+    // const goalSetDate = goal.date.seconds.toDate()
+    // console.log(goalSetDate)
+
+    function returnDateString(date) {
+        const monthsArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        return `${monthsArr[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
+    }
 
     return (
-        <div>
-            <h1>Goal Card</h1>
-            <h3>Goal Title: {goal.goalTitle}</h3>
-            <h3>Secret Receiver: {goal.shareWith}</h3>
-            {/* <h3>Date Set: {goal.date}</h3> */}
+        <Container>
+            <Typography component="h1" variant='h2'>
+                {goal.goalTitle}
+            </Typography>
+            <Typography component='h3' variant='h4'>
+                Accountable to: {goal.shareWith}
+            </Typography>
+            <Typography component='h4' variant='h5'>
+                Goal Set Date: {returnDateString(goalSetDate)}
+                {/* // Objects are not valid react children
+                 Goal Set Date: {goalSetDate} */}
+            </Typography>
+            <Typography component='h4' variant='h5'>
+                Check In Due: {returnDateString(goalSetDate)}
+            </Typography>
 
-        </div>
+
+        </Container>
     )
 }
 
