@@ -7,7 +7,9 @@ import {
     getFirestore,
     collection,
     onSnapshot,
-    query
+    query,
+    serverTimestamp,
+    orderBy
 } from 'firebase/firestore'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -78,31 +80,36 @@ function getGoals(uid, callback) {
     )
 }
 
+// Chat services
+async function sendMessage(roomID, user, text) {
+    try {
+        await addDoc(collection(db, 'chat-rooms', roomID, 'messages'), {
+            uid: user.uid,
+            displayName: user.displayName,
+            text: text.trim(),
+            timestamp: serverTimestamp()
+        });
+    } catch (error) {
+        console.error(error)
+    }
+}
 
-// multi auth testing
+function getMessages(roomID, callback) {
+    return onSnapshot(
+        query(
+            collection(db, 'chat-rooms', roomID, 'messages'),
+            orderBy('timestamp', 'asc')
+        ),
+        (querySnapshot) => {
+            const messages = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            callback(messages)
+        }
+    )
+}
 
-// function onSolvedRecaptcha() {
-//     console.log('recaptcha solved')
-// }
+// end chat services
 
-// const recaptchaVerifier = new RecaptchaVerifier(
-//     "recaptcha-container",
-
-//     // Optional reCAPTCHA parameters.
-//     {
-//       "size": "normal",
-//       "callback": function(response) {
-//         console.log(response)
-//         // reCAPTCHA solved, you can proceed with 
-//         // phoneAuthProvider.verifyPhoneNumber(...).
-//         onSolvedRecaptcha();
-//       },
-//       "expired-callback": function() {
-//         // Response expired. Ask user to solve reCAPTCHA again.
-//         // ...
-//         console.log('u failed')
-//       }
-//     }, app
-// );
-
-export { loginWithGoogle, test, submitGoal, getGoals }
+export { loginWithGoogle, test, submitGoal, getGoals, sendMessage, getMessages }

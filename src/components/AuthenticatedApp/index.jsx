@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { AddGoalForm } from '../AddGoalForm';
 import { StatusPage } from '../StatusPage'
+import { ChatRoom } from '../Chatroom';
 // import { Landing } from '../Landing';
 // import { ChatRoom } from '../ChatRoom';
 
@@ -9,11 +10,13 @@ function AuthenticatedApp() {
         <>
             <h1>Authenticated</h1>
             <BrowserRouter>
-                <Link to='/statuspage'>Status Page</Link>
-                <Link to='/'>Add Goal Form</Link>
+                <Link to='/'>Status Page</Link>
+                <Link to='/addgoal'>Add Goal Form</Link>
+                <Link to='/chatroom'>Chatroom</Link>
                 <Routes>
-                    <Route path="/" element={<AddGoalForm />} />
-                    <Route path='/statuspage' element={<StatusPage />} />
+                    <Route path="/addgoal" element={<AddGoalForm />} />
+                    <Route path='/' element={<StatusPage />} />
+                    <Route path='/chatroom' element={<ChatRoom />} />
                 </Routes>
             </BrowserRouter>
         </>
