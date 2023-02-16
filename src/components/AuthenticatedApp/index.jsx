@@ -16,6 +16,7 @@ function AuthenticatedApp() {
                 <Routes>
                     <Route path="/addgoal" element={<AddGoalForm />} />
                     <Route path='/' element={<StatusPage />} />
+                    <Route path='/statuspage' element={<StatusPage />} />
                     <Route path='/chatroom' element={<ChatRoom />} />
                 </Routes>
             </BrowserRouter>

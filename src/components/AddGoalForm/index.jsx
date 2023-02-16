@@ -1,4 +1,5 @@
 import React from 'react';
+import { encryptString } from 'encrypt-string/dist/source';
 
 import { submitGoal } from '../../services/firebase';
 import { useAuth } from '../../hooks/useAuth'
