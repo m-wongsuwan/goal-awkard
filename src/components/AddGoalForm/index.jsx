@@ -1,8 +1,9 @@
 import React from 'react';
-import { encryptString } from 'encrypt-string/dist/source';
 
 import { submitGoal } from '../../services/firebase';
 import { useAuth } from '../../hooks/useAuth'
+
+import emailjs from 'emailjs-com'
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -33,9 +34,26 @@ function AddGoalForm() {
         paused: false,
         shared: false,
         date: '',
-        checkinDueDate: ''
+        checkinDueDate: '',
+        // testing
+        from_name: 'secret service',
+        to_name: 'morgan',
+        message: 'poopy butthole'
     }
     const [inputs, setInputs] = React.useState(initInputs)
+
+
+    // from_name to_name message
+    function sendEmail() {
+        emailjs.sendForm('secret_service', 'send_secret', inputs, 'uA-6EB5WK_WxXR47o')
+            .then((result) => {
+                alert("The person you have indicated will be able to access your secret if you don't check in on schedule.")
+                console.log(result.text)
+            }, (error) => {
+                console.log(error.text)
+            }
+            )
+    }
 
     function handleChange(e) {
         const { name, value } = e.target
@@ -91,6 +109,7 @@ function AddGoalForm() {
                     (e)=>{e.preventDefault()
                     submit()}
                 }
+                // can i add ref={form} here????
             >
                 <InputLabel id="goalTitle">Goal Title</InputLabel>
                 <TextField 
@@ -232,6 +251,9 @@ function AddGoalForm() {
                     type="submit"
                 >
                     Submit
+                </Button>
+                <Button onClick={() => sendEmail()}>
+                    test email
                 </Button>
             </Box>
         </Container>
