@@ -4,6 +4,8 @@ import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
 
 import {
     addDoc,
+    setDoc,
+    doc,
     getFirestore,
     collection,
     onSnapshot,
@@ -55,9 +57,21 @@ async function test(string) {
     }
 }
 
+// original
+// async function submitGoal(uid, goalObject) {
+//     try {
+//         await addDoc(collection(db, 'users', uid, 'goals'), {
+//             ...goalObject
+//         })
+//     } catch (error) {
+//         console.error(error)
+//     }
+// }
+
+// test setDoc
 async function submitGoal(uid, goalObject) {
     try {
-        await addDoc(collection(db, 'users', uid, 'goals'), {
+        await setDoc(doc(db, 'users', uid, 'goals', goalObject.docName), {
             ...goalObject
         })
     } catch (error) {

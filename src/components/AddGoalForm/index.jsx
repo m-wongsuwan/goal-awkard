@@ -4,6 +4,8 @@ import { submitGoal } from '../../services/firebase';
 import { useAuth } from '../../hooks/useAuth'
 
 import emailjs from 'emailjs-com'
+import { v4 as uuidv4 } from 'uuid'
+import CryptoJS from 'crypto-js'
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -20,6 +22,21 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 
 function AddGoalForm() {
     const { user } = useAuth()
+    // user = {uid: 'ysQMrka0omWRREgJXY5ac7o3Zyv1', displayName: 'Morgan Wongsuwan'}
+
+    // let data = 'this string is data'
+    // let cipherText = CryptoJS.AES.encrypt(JSON.stringify(data), 'mysecretkey').toString()
+    // console.log(cipherText)
+    // let bytes = CryptoJS.AES.decrypt(cipherText, 'mysecretkey')
+    // let decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
+    // console.log(decryptedData)
+
+    // It works :)
+    let secretsecret = 'U2FsdGVkX1/acjPD+frdKK3e0z4+sfLtlNUTorl5JlGWDgdY89uU2ls3lZEEpHM8'
+    let bytes = CryptoJS.AES.decrypt(secretsecret, 'Encryption Test')
+    let decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
+    console.log(decryptedData)
+
 
     const initInputs = {
         goalTitle: "",
@@ -35,17 +52,17 @@ function AddGoalForm() {
         shared: false,
         date: '',
         checkinDueDate: '',
-        // testing
-        from_name: 'secret service',
-        to_name: 'morgan',
-        message: 'poopy butthole'
+        senderUid: user.uid,
+        senderName: user.displayName,
+        passphrase: ''
     }
+
     const [inputs, setInputs] = React.useState(initInputs)
 
 
     // from_name to_name message
     function sendEmail() {
-        emailjs.sendForm('secret_service', 'send_secret', inputs, 'uA-6EB5WK_WxXR47o')
+        emailjs.sendForm('secret_service', 'send_secret', 'form', 'uA-6EB5WK_WxXR47o')
             .then((result) => {
                 alert("The person you have indicated will be able to access your secret if you don't check in on schedule.")
                 console.log(result.text)
@@ -82,6 +99,15 @@ function AddGoalForm() {
             date: new Date(),
             checkinDueDate: returnDueDate(inputs.checkinFrequency)
         }
+        // delete inputsWithDate["senderUid"]
+        inputsWithDate.docName = uuidv4()
+        
+        // ENCRYPTION
+        inputsWithDate.secretText = CryptoJS.AES.encrypt(JSON.stringify(inputsWithDate.secretText), inputs.passphrase).toString()
+        
+        // Delete unnecessary / security risk keys
+        delete inputsWithDate["senderName"]
+        delete inputsWithDate["passphrase"]
 
         submitGoal(user.uid, inputsWithDate)
         setInputs(initInputs)
@@ -103,6 +129,7 @@ function AddGoalForm() {
             </Box>
             
             <Box 
+                id="form"
                 component="form" 
                 sx={{ mt: 1 }} 
                 onSubmit={
@@ -198,6 +225,41 @@ function AddGoalForm() {
                     label="Secret Receiver Email"
                     name='shareWithEmail'
                     value={inputs.shareWithEmail}
+                    onChange={handleChange}                            
+                />
+                    
+                <InputLabel>Passphrase</InputLabel>
+                <TextField 
+                    margin='normal'
+                    required
+                    fullWidth
+                    multiline
+                    id='passphrase'
+                    label="Passphrase"
+                    name='passphrase'
+                    value={inputs.passphrase}
+                    onChange={handleChange}                            
+                />
+
+
+                <TextField 
+                    sx={{display: 'none'}}
+                    margin='normal'
+                    fullWidth
+                    id='senderName'
+                    label="Hidden senderName TextField"
+                    name='senderName'
+                    value={inputs.senderName}
+                    onChange={handleChange}                            
+                />
+                <TextField 
+                    sx={{display: 'none'}}
+                    margin='normal'
+                    fullWidth
+                    id='senderUid'
+                    label="Secret Receiver Email"
+                    name='senderUid'
+                    value={inputs.senderUid}
                     onChange={handleChange}                            
                 />
                     
