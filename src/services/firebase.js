@@ -47,17 +47,7 @@ async function loginWithGoogle() {
     }
 }
 
-async function test(string) {
-    try {
-        await addDoc(collection(db, 'tests'), {
-            testString: string
-        });
-    } catch (error) {
-        console.error(error)
-    }
-}
-
-// original
+// original with addDoc
 // async function submitGoal(uid, goalObject) {
 //     try {
 //         await addDoc(collection(db, 'users', uid, 'goals'), {
@@ -68,7 +58,7 @@ async function test(string) {
 //     }
 // }
 
-// test setDoc
+// working with setDoc
 async function submitGoal(uid, goalObject) {
     try {
         await setDoc(doc(db, 'users', uid, 'goals', goalObject.docName), {
@@ -90,6 +80,20 @@ function getGoals(uid, callback) {
                 ...doc.data()
             }));
             callback(goals)
+        }
+    )
+}
+
+function getSecret(uid, secretId, callback) {
+    return onSnapshot(
+        query(
+            // we want a doc so we query a doc rather than a collection
+            doc(db, 'users', uid, 'goals', secretId)
+        ),
+        (querySnapshot) => {
+            // client side never recieves anything but encrypted secretText
+            const secret = querySnapshot.data().secretText
+            callback(secret)
         }
     )
 }
@@ -126,4 +130,4 @@ function getMessages(roomID, callback) {
 
 // end chat services
 
-export { loginWithGoogle, test, submitGoal, getGoals, sendMessage, getMessages }
+export { loginWithGoogle, submitGoal, getGoals, sendMessage, getMessages, getSecret }
