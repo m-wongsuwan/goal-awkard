@@ -92,7 +92,10 @@ function getSecret(uid, secretId, callback) {
         ),
         (querySnapshot) => {
             // client side never recieves anything but encrypted secretText
-            const secret = querySnapshot.data().secretText
+            const secret = {
+                secretText: querySnapshot.data().secretText,
+                checkinDueDate: querySnapshot.data().checkinDueDate
+            }
             callback(secret)
         }
     )

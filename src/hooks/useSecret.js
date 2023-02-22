@@ -1,13 +1,13 @@
 import React from "react";
 import { getSecret } from "../services/firebase";
 
-function useSecret(uid, secretId) {
-    const [secret, setSecret] = React.useState()
+function useSecret(uid, docName) {
+    const [secret, setSecret] = React.useState({})
 
     React.useEffect(()=> {
-        const unsubscribe = getSecret(uid, secretId, setSecret);
+        const unsubscribe = getSecret(uid, docName, setSecret);
         return unsubscribe;
-    }, [uid, secretId]);
+    }, [uid, docName]);
 
     return secret
 

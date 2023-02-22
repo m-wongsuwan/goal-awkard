@@ -1,2 +1,4 @@
-email to text carrier info
-https://www.digitaltrends.com/mobile/how-to-send-a-text-from-your-email-account/
+Decryption example:
+    let secretsecret = 'U2FsdGVkX1/acjPD+frdKK3e0z4+sfLtlNUTorl5JlGWDgdY89uU2ls3lZEEpHM8'
+    let bytes = CryptoJS.AES.decrypt(secretsecret, 'Encryption Test')
+    let decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))

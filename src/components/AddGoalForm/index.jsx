@@ -10,33 +10,18 @@ import CryptoJS from 'crypto-js'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
+import FormControlLabel from '@mui/material/FormControlLabel'
+import InputLabel from '@mui/material/InputLabel';
+import Radio from '@mui/material/Radio'
+import RadioGroup from '@mui/material/RadioGroup'
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField'
-import InputLabel from '@mui/material/InputLabel';
 // import Select from '@mui/material/Select';
 // import MenuItem from '@mui/material/MenuItem';
-import RadioGroup from '@mui/material/RadioGroup'
-import Radio from '@mui/material/Radio'
-import FormControlLabel from '@mui/material/FormControlLabel'
 
 
 function AddGoalForm() {
     const { user } = useAuth()
-    // user = {uid: 'ysQMrka0omWRREgJXY5ac7o3Zyv1', displayName: 'Morgan Wongsuwan'}
-
-    // let data = 'this string is data'
-    // let cipherText = CryptoJS.AES.encrypt(JSON.stringify(data), 'mysecretkey').toString()
-    // console.log(cipherText)
-    // let bytes = CryptoJS.AES.decrypt(cipherText, 'mysecretkey')
-    // let decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
-    // console.log(decryptedData)
-
-    // It works :)
-    let secretsecret = 'U2FsdGVkX1/acjPD+frdKK3e0z4+sfLtlNUTorl5JlGWDgdY89uU2ls3lZEEpHM8'
-    let bytes = CryptoJS.AES.decrypt(secretsecret, 'Encryption Test')
-    let decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
-    console.log(decryptedData)
-
 
     const initInputs = {
         goalTitle: "",
@@ -54,7 +39,9 @@ function AddGoalForm() {
         checkinDueDate: '',
         senderUid: user.uid,
         senderName: user.displayName,
-        passphrase: ''
+        passphrase: '',
+        // watch for breaking change 2/21 11:44am
+        docName: uuidv4()
     }
 
     const [inputs, setInputs] = React.useState(initInputs)
@@ -99,15 +86,21 @@ function AddGoalForm() {
             date: new Date(),
             checkinDueDate: returnDueDate(inputs.checkinFrequency)
         }
+        
         // delete inputsWithDate["senderUid"]
-        inputsWithDate.docName = uuidv4()
+
+        // watch for breaking change 2/21 11:44am
+        // inputsWithDate.docName = uuidv4()
         
         // ENCRYPTION
         inputsWithDate.secretText = CryptoJS.AES.encrypt(JSON.stringify(inputsWithDate.secretText), inputs.passphrase).toString()
         
-        // Delete unnecessary / security risk keys
+        // These key:value pairs are only needed for sending the notification to the secret receiver
+        // We specifically wouldn't want to save the passphrase anywhere
         delete inputsWithDate["senderName"]
         delete inputsWithDate["passphrase"]
+
+        sendEmail()
 
         submitGoal(user.uid, inputsWithDate)
         setInputs(initInputs)
@@ -241,7 +234,11 @@ function AddGoalForm() {
                     onChange={handleChange}                            
                 />
 
-
+                {/* 
+                    A quirk of email-js is that it takes values from forms as "props." So
+                    while we want to send these values to the secret Receiver, the secret 
+                    sender does not need to see them while completing the form.
+                */}
                 <TextField 
                     sx={{display: 'none'}}
                     margin='normal'
@@ -257,45 +254,21 @@ function AddGoalForm() {
                     margin='normal'
                     fullWidth
                     id='senderUid'
-                    label="Secret Receiver Email"
+                    label="hidden senderUid TextField"
                     name='senderUid'
                     value={inputs.senderUid}
                     onChange={handleChange}                            
                 />
-                    
-
-                {/* Not necessary for MVP of send secret to email
-                inputs.shareWithContactType === "text" ? 
-                    <>
-                        <TextField 
-                            margin='normal'
-                            required
-                            fullWidth
-                            multiline
-                            id='shareWithText'
-                            label="Secret Receiver Text Number"
-                            name='shareWithText'
-                            value={inputs.shareWithText}
-                            onChange={handleChange}                            
-                        />
-                        
-                        <InputLabel>Secret Receiver Phone Provider</InputLabel>
-                        <RadioGroup
-                            name='phoneCarrier'
-                            value={inputs.phoneCarrier}
-                            onChange={handleChange}
-                        >
-                            <FormControlLabel value="att" control={<Radio />} label="AT&T" />
-                            <FormControlLabel value="sprint" control={<Radio />} label="Sprint" />
-                            <FormControlLabel value="verizon" control={<Radio />} label="Verizon" />
-                            <FormControlLabel value="tmobile" control={<Radio />} label="T-Mobile" />
-                            <FormControlLabel value="boost" control={<Radio />} label="Boost" />
-                            <FormControlLabel value="cricket" control={<Radio />} label="Cricket" />
-                        </RadioGroup>
-                    </>
-                    
-                    : null
-                */}
+                <TextField 
+                    sx={{display: 'none'}}
+                    margin='normal'
+                    fullWidth
+                    id='docName'
+                    label="hidden docName Textfield"
+                    name='docName'
+                    value={inputs.docName}
+                    onChange={handleChange}                            
+                />
 
                 <InputLabel>Check In Frequency</InputLabel>
                     <RadioGroup
@@ -314,9 +287,11 @@ function AddGoalForm() {
                 >
                     Submit
                 </Button>
+                {/*
+                This was for testing emailjs but this should happen on submit
                 <Button onClick={() => sendEmail()}>
                     test email
-                </Button>
+                </Button> */}
             </Box>
         </Container>
 
@@ -324,3 +299,36 @@ function AddGoalForm() {
 }
 
 export { AddGoalForm }
+
+{/* Not necessary for MVP of send secret to email
+inputs.shareWithContactType === "text" ? 
+    <>
+        <TextField 
+            margin='normal'
+            required
+            fullWidth
+            multiline
+            id='shareWithText'
+            label="Secret Receiver Text Number"
+            name='shareWithText'
+            value={inputs.shareWithText}
+            onChange={handleChange}                            
+        />
+        
+        <InputLabel>Secret Receiver Phone Provider</InputLabel>
+        <RadioGroup
+            name='phoneCarrier'
+            value={inputs.phoneCarrier}
+            onChange={handleChange}
+        >
+            <FormControlLabel value="att" control={<Radio />} label="AT&T" />
+            <FormControlLabel value="sprint" control={<Radio />} label="Sprint" />
+            <FormControlLabel value="verizon" control={<Radio />} label="Verizon" />
+            <FormControlLabel value="tmobile" control={<Radio />} label="T-Mobile" />
+            <FormControlLabel value="boost" control={<Radio />} label="Boost" />
+            <FormControlLabel value="cricket" control={<Radio />} label="Cricket" />
+        </RadioGroup>
+    </>
+    
+    : null
+*/}
