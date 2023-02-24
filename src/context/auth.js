@@ -1,4 +1,6 @@
 import React from 'react';
+
+import { logOffService } from '../services/firebase'
 import { loginWithGoogle } from '../services/firebase';
 
 const AuthContext = React.createContext();
@@ -11,14 +13,23 @@ const AuthProvider = (props) => {
 
         if (!user) {
             // TODO: Handle failed login
+            alert('Problem signing in. Please try again!')
         }
 
         setUser(user);
     };
+    
+    function logOff() {
+        logOffService()
+        setUser(null)
+    }
+    
+    const value = { user, login, logOff };
 
-    const value = { user, login };
 
     return <AuthContext.Provider value={value} {...props} />;
 };
+
+
 
 export { AuthContext, AuthProvider };

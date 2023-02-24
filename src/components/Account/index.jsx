@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from 'react-router-dom'
 
-import { logOff } from "../../services/firebase";
+// import { logOff } from "../../services/firebase";
 
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button'
 
+import { AuthContext } from "../../context/auth";
+
 function Account() {
+    const {logOff} = useContext(AuthContext)
+    console.log(logOff)
 
     return (
         <>

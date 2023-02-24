@@ -3,27 +3,19 @@ import React from "react";
 import { extendTime, deleteGoal } from "../../services/firebase";
 
 import Container from '@mui/material/Container';
+import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography';
 
 function GoalCard(props) {
     const {
         checkinDueDate,
-        docName,
-        date,
-        goalTitle,
         checkinFrequency,
+        date,
+        docName,
+        goalTitle,
         senderUid,
         shareWith
     } = props.goal
-    
-    // date template
-    // console.log(new Date (goal.date.seconds * 1000 ))
-
-    // template for adding days
-    // const today = new Date()
-    // let numberOfDaysToAdd = 7
-    // let result = today.setDate(today.getDate() + numberOfDaysToAdd)
-    // console.log(new Date(result))
 
     const goalSetDate = new Date (date.seconds * 1000 )
     const checkinDate = new Date (checkinDueDate.seconds * 1000)
@@ -74,7 +66,7 @@ function GoalCard(props) {
                 alert("You've added one week to your check in time.")
             } else {
                 willExtend = false
-                alert("You can't check in until one day before the check in time.")
+                alert("You can't check in until two days before the check in time.")
             }
         }
         if (checkinFrequency === "monthly") {
@@ -95,30 +87,47 @@ function GoalCard(props) {
         
     }
 
+    function capitalizeFirstLetter(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1)
+    }
+
     return (
         <Container>
             <Typography component="h1" variant='h2'>
                 {goalTitle}
             </Typography>
             <Typography component='h3' variant='h4'>
-                Accountable to: {shareWith}
+                Accountable to: {capitalizeFirstLetter(shareWith)}
             </Typography>
             <Typography component='h4' variant='h5'>
                 Goal Set Date: {returnDateString(goalSetDate)}
-                {/* // Objects are not valid react children
-                 Goal Set Date: {goalSetDate} */}
             </Typography>
             <Typography component='h4' variant='h5'>
                 Check In Due: {returnDateString(checkinDate)}
             </Typography>
             <Typography component='h4' variant='h5'>
-                {/* make this code easy to understand */}
-                Check In Frequency: {checkinFrequency.charAt(0).toUpperCase() + checkinFrequency.slice(1)}
+                Check In Frequency: {capitalizeFirstLetter(checkinFrequency)}
             </Typography>
             
-            <button onClick={()=> handleExtend()}>set due date to this moment</button>
-            <button onClick={()=> deleteGoal(senderUid, docName)}>delete goal</button>
-
+            <Button 
+                onClick={()=> handleExtend()}
+                variant="contained"
+                sx={{
+                    m:1
+                }}
+            >
+                Check In
+            </Button>
+            <Button 
+                variant="contained"
+                color="error"
+                onClick={()=> deleteGoal(senderUid, docName)}
+                sx={{
+                    m:1
+                }}
+            >
+                Delete
+            </Button>
 
         </Container>
     )

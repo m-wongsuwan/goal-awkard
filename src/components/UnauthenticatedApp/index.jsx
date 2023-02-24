@@ -1,7 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Typography from '@mui/material/Typography';
-
 import { Accountability } from '../Accountability';
 import { BlockedPage } from '../BlockedPage';
 import { NoLinkAccountability } from '../NoLinkAccountability';
@@ -13,8 +11,6 @@ function UnauthenticatedApp() {
 
     return (
         <>
-            <Typography>UnauthenticatedApp Component (debug text)</Typography>
-
             <BrowserRouter>
                 <Routes>
                     <Route path='/' element={<UnauthenticatedWelcome />} />

@@ -1,15 +1,26 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import { useAuth } from '../../hooks/useAuth';
 
-import Button from "@mui/material/Button"
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
+import Button from "@mui/material/Button"
 import Grid from '@mui/material/Unstable_Grid2'
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 
 function SignIn() {
     const { login } = useAuth();
+    const navigate = useNavigate()
+
+    function logInAndNavigateHome() {
+        login()
+        try {
+            navigate('/')
+        } catch (error) {
+            
+        }
+    }
 
     return (
         <Grid xs={6}>
@@ -18,7 +29,7 @@ function SignIn() {
                     <Typography component='h1' variant='h3'>
                         Here to track your goals?
                     </Typography>
-                    <Button variant='contained' onClick={login}>
+                    <Button variant='contained' onClick={logInAndNavigateHome}>
                         Login with Google
                     </Button>
                 </Box>

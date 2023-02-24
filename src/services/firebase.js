@@ -20,10 +20,7 @@ import {
     setDoc,
     updateDoc
 } from 'firebase/firestore'
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyA5m-LMFxGWWblooy7iQ7k46RkE9HX_YII",
   authDomain: "goal-a.firebaseapp.com",
@@ -33,7 +30,6 @@ const firebaseConfig = {
   appId: "1:123020628726:web:d942a1a4b49015966312d7"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app)
 
@@ -54,14 +50,12 @@ async function loginWithGoogle() {
     }
 }
 
-// problems 2/23
-function logOff() {
-    console.log('hi')
+function logOffService() {
     const auth = getAuth();
     signOut(auth).then(()=> {
         console.log("Successfully signed off")
     }).catch((error) => {
-        console.log("Error signing out")
+        console.log(error)
     })
 }
 
@@ -75,6 +69,7 @@ async function submitGoal(uid, goalObject) {
     }
 }
 
+// client could send any date they want. Security rule
 async function extendTime(uid, goalId, newDate) {
     try {
         await updateDoc(doc(db, 'users', uid, 'goals', goalId), {
@@ -112,11 +107,10 @@ function getGoals(uid, callback) {
 function getSecret(uid, goalId, callback) {
     return onSnapshot(
         query(
-            // we want a doc so we query a doc rather than a collection
             doc(db, 'users', uid, 'goals', goalId)
         ),
         (querySnapshot) => {
-            // client side never recieves anything but encrypted secretText
+            // client side never recieves anything but encrypted secretText and due date
             const secret = {
                 secretText: querySnapshot.data().secretText,
                 checkinDueDate: querySnapshot.data().checkinDueDate
@@ -167,7 +161,7 @@ export {
     getMessages, 
     getSecret,
     loginWithGoogle, 
-    logOff,
+    logOffService,
     sendMessage, 
     submitGoal
  }

@@ -7,7 +7,6 @@ import { Account } from '../Account';
 function AuthenticatedApp() {
     return (
         <>
-            <h1>Authenticated</h1>
             <BrowserRouter>
                 <Link to='/'>Status Page</Link>
                 <Link to='/addgoal'>Add Goal Form</Link>

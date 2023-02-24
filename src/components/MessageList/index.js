@@ -2,6 +2,11 @@ import React from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { useMessages } from '../../hooks/useMessages'
 
+import Box from '@mui/material/Box'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemText from '@mui/material/ListItemText'
+
 function MessageList({ roomID }) {
     const containerRef = React.useRef(null);
     const { user } = useAuth()
@@ -16,16 +21,49 @@ function MessageList({ roomID }) {
     function Message({ message, isOwnMessage }) {
         const { displayName, text } = message;
         return (
-            <li className={['message', isOwnMessage && 'own-message'].join(' ')}>
-                <h4 className="sender">{isOwnMessage ? 'You' : displayName}</h4>
-                <div>{text}</div>
-            </li>
+            <ListItem 
+                className={['message', isOwnMessage && 'own-message'].join(' ')}
+                sx={{
+
+                    // width: '45vw'
+                    // alignSelf: 'flex-end'
+                }}
+            >
+                <ListItemText
+                    primary={text}
+                    secondary={isOwnMessage ? 'You' : displayName}
+                    sx={{
+                        textAlign: isOwnMessage ? 'right' : 'left',
+                        backgroundColor: isOwnMessage ? 'lightBlue' : 'lightGreen',
+                        marginLeft: isOwnMessage ? 15 : null,
+                        marginRight: !isOwnMessage ? 15 : null,
+                        p: 2,
+                        borderRadius: '5px'
+                    }}
+                />
+            </ListItem>
         )
     }
 
     return (
-        <div className='message-list-container' ref={containerRef}>
-            <ul className='message-list'>
+        <Box 
+            component='div'
+            ref={containerRef}
+            className='message-list-container'
+            sx={{
+                height: '65vh',
+                overflow: 'auto',
+                flex: 1
+            }}
+        >
+            <List 
+                className='message-list'
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start'
+                }}
+            >
                 {messages.map((x) => (
                     <Message 
                         key={x.id}
@@ -33,9 +71,9 @@ function MessageList({ roomID }) {
                         isOwnMessage={x.uid === user.uid}
                     />
                 ))}
-            </ul>
+            </List>
 
-        </div>
+        </Box>
     )
 
 }

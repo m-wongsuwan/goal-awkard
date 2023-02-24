@@ -37,3 +37,12 @@ inputs.shareWithContactType === "text" ?
     
     : null
 */}
+
+    date template
+    console.log(new Date (goal.date.seconds * 1000 ))
+
+    template for adding days
+    const today = new Date()
+    let numberOfDaysToAdd = 7
+    let result = today.setDate(today.getDate() + numberOfDaysToAdd)
+    console.log(new Date(result))

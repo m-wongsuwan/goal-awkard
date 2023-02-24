@@ -1,15 +1,14 @@
 import React from "react";
 
 import Box from '@mui/material/Box'
-import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
 
 import { sendMessage } from "../../services/firebase";
 import { useAuth } from "../../hooks/useAuth";
 
 function MessageInput() {
     const { user } = useAuth()
-    console.log(user)
     
     const [messageInput, setMessageInput] = React.useState('')
 
@@ -30,20 +29,29 @@ function MessageInput() {
                 e.preventDefault()
                 handleSubmit()
             }}
+            sx={{
+                height: '55px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}
         >
             <TextField 
-                    margin='normal'
-                    // fullWidth
+                    fullWidth
                     id='message Input '
                     label="Aa"
                     name='messageInput'
                     value={messageInput}
                     onChange={handleChange}
                     autoFocus
+                    autoComplete="off"
                 />
                 <Button 
                     variant="contained" 
                     type='submit'
+                    sx={{
+                        height: '100%'
+                    }}
                 >
                     Send
                 </Button>
