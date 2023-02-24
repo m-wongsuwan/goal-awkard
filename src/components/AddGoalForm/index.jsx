@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { submitGoal } from '../../services/firebase';
 import { useAuth } from '../../hooks/useAuth'
@@ -16,32 +17,26 @@ import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField'
-// import Select from '@mui/material/Select';
-// import MenuItem from '@mui/material/MenuItem';
 
 
 function AddGoalForm() {
     const { user } = useAuth()
+    const navigate = useNavigate()
 
     const initInputs = {
-        goalTitle: "",
-        // secretType: "text",
-        checkinFrequency: "weekly",
-        secretText: "",
-        shareWith: "",
-        // shareWithContactType: "none",
-        shareWithEmail: "",
-        // shareWithText: '',
-        // phoneCarrier: 'att',
-        paused: false,
-        shared: false,
-        date: '',
         checkinDueDate: '',
-        senderUid: user.uid,
-        senderName: user.displayName,
+        checkinFrequency: "weekly",
+        date: '',
+        docName: uuidv4(),
+        goalTitle: "",
         passphrase: '',
-        // watch for breaking change 2/21 11:44am
-        docName: uuidv4()
+        paused: false,
+        senderName: user.displayName,
+        senderUid: user.uid,
+        shared: false,
+        shareWith: "",
+        shareWithEmail: "",
+        secretText: "",
     }
 
     const [inputs, setInputs] = React.useState(initInputs)
@@ -87,16 +82,11 @@ function AddGoalForm() {
             checkinDueDate: returnDueDate(inputs.checkinFrequency)
         }
         
-        // delete inputsWithDate["senderUid"]
-
-        // watch for breaking change 2/21 11:44am
-        // inputsWithDate.docName = uuidv4()
-        
         // ENCRYPTION
         inputsWithDate.secretText = CryptoJS.AES.encrypt(JSON.stringify(inputsWithDate.secretText), inputs.passphrase).toString()
         
-        // These key:value pairs are only needed for sending the notification to the secret receiver
-        // We specifically wouldn't want to save the passphrase anywhere
+        // These key:value pairs are only needed for sending the notification to the secret receiver with emailJS
+        // We specifically wouldn't want to save the passphrase anywhere and the sender's name is included with the google Auth package
         delete inputsWithDate["senderName"]
         delete inputsWithDate["passphrase"]
 
@@ -104,6 +94,9 @@ function AddGoalForm() {
 
         submitGoal(user.uid, inputsWithDate)
         setInputs(initInputs)
+        
+        navigate('/')
+
     }
 
     return(
@@ -116,7 +109,7 @@ function AddGoalForm() {
                     alignItems: 'center'
                 }}    
             >
-                <Typography component="h1" variant="h5">
+                <Typography component="h1" variant="h3">
                     Add Goal
                 </Typography>
             </Box>
@@ -129,9 +122,8 @@ function AddGoalForm() {
                     (e)=>{e.preventDefault()
                     submit()}
                 }
-                // can i add ref={form} here????
             >
-                <InputLabel id="goalTitle">Goal Title</InputLabel>
+                <InputLabel id="goalTitle" variant='filled' sx={{marginBottom: 1}}>Goal Title</InputLabel>
                 <TextField 
                     margin='normal'
                     required
@@ -144,22 +136,30 @@ function AddGoalForm() {
                     autoFocus
                 />
 
-                {/* <InputLabel>Secret Type</InputLabel>
-                <Select
-                    id="secretType"
-                    value={inputs.secretType}
-                    required
-                    label="secretType"
-                    name='secretType'
-                    onChange={handleChange}
-                >
-                    <MenuItem value={"none"}>Select Type</MenuItem>
-                    <MenuItem value={"text"}>Text Only</MenuItem>
-                    <MenuItem value={"file"}>File</MenuItem>
-                </Select> */}
+                <InputLabel variant='filled' sx={{marginBottom: 1}}>Check In Frequency</InputLabel>
+
+                    <RadioGroup
+                        row
+                        name='checkinFrequency'
+                        value={inputs.checkinFrequency}
+                        onChange={handleChange}
+                    >
+                    <Box
+                        sx={{
+                            width: '100%',
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+
+                        }}
+                    >
+                        <FormControlLabel value="daily" control={<Radio />} label="Daily" />
+                        <FormControlLabel value="weekly" control={<Radio />} label="Weekly" />
+                        <FormControlLabel value="monthly" control={<Radio />} label="Monthly" />
+                    </Box>
+                    </RadioGroup>
 
                 
-                <InputLabel>Secret Description</InputLabel>
+                <InputLabel variant='filled' sx={{marginBottom: 1}}>Secret Description</InputLabel>
                 <TextField 
                     margin='normal'
                     required
@@ -171,14 +171,8 @@ function AddGoalForm() {
                     value={inputs.secretText}
                     onChange={handleChange}                            
                 />
-                    
-                {/* Going with MVP of text secrets over email
-                {inputs.secretType === "file" ? 
-                    <h1>this will appear if the input type is File</h1> 
-                    : null
-                } */}
                 
-                <Typography component='p' variant='p'>Who should we share your secret with if you don't follow through with your goal?</Typography>
+                <InputLabel variant='filled' sx={{marginBottom: 1}}>Who should we share your secret with?</InputLabel>
                 <TextField 
                     margin='normal'
                     required
@@ -189,26 +183,8 @@ function AddGoalForm() {
                     value={inputs.shareWith}
                     onChange={handleChange}
                 />
-
-                {/* Choosing MVP of send to email
-                
-                <InputLabel>How should we get in touch with them?</InputLabel>
-                <Select
-                    id="shareWithContactType"
-                    value={inputs.shareWithContactType}
-                    required
-                    label="shareWithContactType"
-                    name='shareWithContactType'
-                    onChange={handleChange}
-                >
-                    <MenuItem value={"none"}>Select Type</MenuItem>
-                    <MenuItem value={"email"}>Email</MenuItem>
-                    <MenuItem value={"text"}>Text</MenuItem>
-                </Select> */}
-
-                
-                    
-                <InputLabel>Secret Receiver Email</InputLabel>
+              
+                <InputLabel variant='filled' sx={{marginBottom: 1}}>Secret Receiver Email</InputLabel>
                 <TextField 
                     margin='normal'
                     required
@@ -221,7 +197,7 @@ function AddGoalForm() {
                     onChange={handleChange}                            
                 />
                     
-                <InputLabel>Passphrase</InputLabel>
+                <InputLabel variant='filled' sx={{marginBottom: 1}}>Passphrase</InputLabel>
                 <TextField 
                     margin='normal'
                     required
@@ -270,28 +246,13 @@ function AddGoalForm() {
                     onChange={handleChange}                            
                 />
 
-                <InputLabel>Check In Frequency</InputLabel>
-                    <RadioGroup
-                        name='checkinFrequency'
-                        value={inputs.checkinFrequency}
-                        onChange={handleChange}
-                    >
-                        <FormControlLabel value="daily" control={<Radio />} label="Daily" />
-                        <FormControlLabel value="weekly" control={<Radio />} label="Weekly" />
-                        <FormControlLabel value="monthly" control={<Radio />} label="Monthly" />
-                </RadioGroup>
-
                 <Button 
                     variant="contained"
                     type="submit"
                 >
                     Submit
                 </Button>
-                {/*
-                This was for testing emailjs but this should happen on submit
-                <Button onClick={() => sendEmail()}>
-                    test email
-                </Button> */}
+
             </Box>
         </Container>
 
@@ -300,35 +261,3 @@ function AddGoalForm() {
 
 export { AddGoalForm }
 
-{/* Not necessary for MVP of send secret to email
-inputs.shareWithContactType === "text" ? 
-    <>
-        <TextField 
-            margin='normal'
-            required
-            fullWidth
-            multiline
-            id='shareWithText'
-            label="Secret Receiver Text Number"
-            name='shareWithText'
-            value={inputs.shareWithText}
-            onChange={handleChange}                            
-        />
-        
-        <InputLabel>Secret Receiver Phone Provider</InputLabel>
-        <RadioGroup
-            name='phoneCarrier'
-            value={inputs.phoneCarrier}
-            onChange={handleChange}
-        >
-            <FormControlLabel value="att" control={<Radio />} label="AT&T" />
-            <FormControlLabel value="sprint" control={<Radio />} label="Sprint" />
-            <FormControlLabel value="verizon" control={<Radio />} label="Verizon" />
-            <FormControlLabel value="tmobile" control={<Radio />} label="T-Mobile" />
-            <FormControlLabel value="boost" control={<Radio />} label="Boost" />
-            <FormControlLabel value="cricket" control={<Radio />} label="Cricket" />
-        </RadioGroup>
-    </>
-    
-    : null
-*/}

@@ -1,17 +1,24 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
+import { 
+    getAuth,
+    GoogleAuthProvider, 
+    signInWithPopup, 
+    signOut
+} from 'firebase/auth';
 
 import {
     addDoc,
-    setDoc,
+    collection,
+    deleteDoc,
     doc,
     getFirestore,
-    collection,
     onSnapshot,
+    orderBy,
     query,
     serverTimestamp,
-    orderBy
+    setDoc,
+    updateDoc
 } from 'firebase/firestore'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -47,23 +54,41 @@ async function loginWithGoogle() {
     }
 }
 
-// original with addDoc
-// async function submitGoal(uid, goalObject) {
-//     try {
-//         await addDoc(collection(db, 'users', uid, 'goals'), {
-//             ...goalObject
-//         })
-//     } catch (error) {
-//         console.error(error)
-//     }
-// }
+// problems 2/23
+function logOff() {
+    console.log('hi')
+    const auth = getAuth();
+    signOut(auth).then(()=> {
+        console.log("Successfully signed off")
+    }).catch((error) => {
+        console.log("Error signing out")
+    })
+}
 
-// working with setDoc
 async function submitGoal(uid, goalObject) {
     try {
         await setDoc(doc(db, 'users', uid, 'goals', goalObject.docName), {
             ...goalObject
         })
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+async function extendTime(uid, goalId, newDate) {
+    try {
+        await updateDoc(doc(db, 'users', uid, 'goals', goalId), {
+            checkinDueDate: newDate
+        })
+        
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+async function deleteGoal(uid, goalId) {
+    try {
+        await deleteDoc(doc(db, 'users', uid, 'goals', goalId))
     } catch (error) {
         console.error(error)
     }
@@ -84,11 +109,11 @@ function getGoals(uid, callback) {
     )
 }
 
-function getSecret(uid, secretId, callback) {
+function getSecret(uid, goalId, callback) {
     return onSnapshot(
         query(
             // we want a doc so we query a doc rather than a collection
-            doc(db, 'users', uid, 'goals', secretId)
+            doc(db, 'users', uid, 'goals', goalId)
         ),
         (querySnapshot) => {
             // client side never recieves anything but encrypted secretText
@@ -100,6 +125,8 @@ function getSecret(uid, secretId, callback) {
         }
     )
 }
+
+
 
 // Chat services
 async function sendMessage(roomID, user, text) {
@@ -133,4 +160,14 @@ function getMessages(roomID, callback) {
 
 // end chat services
 
-export { loginWithGoogle, submitGoal, getGoals, sendMessage, getMessages, getSecret }
+export { 
+    deleteGoal,
+    extendTime, 
+    getGoals, 
+    getMessages, 
+    getSecret,
+    loginWithGoogle, 
+    logOff,
+    sendMessage, 
+    submitGoal
+ }

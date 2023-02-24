@@ -2,3 +2,38 @@ Decryption example:
     let secretsecret = 'U2FsdGVkX1/acjPD+frdKK3e0z4+sfLtlNUTorl5JlGWDgdY89uU2ls3lZEEpHM8'
     let bytes = CryptoJS.AES.decrypt(secretsecret, 'Encryption Test')
     let decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
+
+May some day decide to send texts:
+
+{/* Not necessary for MVP of send secret to email
+inputs.shareWithContactType === "text" ? 
+    <>
+        <TextField 
+            margin='normal'
+            required
+            fullWidth
+            multiline
+            id='shareWithText'
+            label="Secret Receiver Text Number"
+            name='shareWithText'
+            value={inputs.shareWithText}
+            onChange={handleChange}                            
+        />
+        
+        <InputLabel>Secret Receiver Phone Provider</InputLabel>
+        <RadioGroup
+            name='phoneCarrier'
+            value={inputs.phoneCarrier}
+            onChange={handleChange}
+        >
+            <FormControlLabel value="att" control={<Radio />} label="AT&T" />
+            <FormControlLabel value="sprint" control={<Radio />} label="Sprint" />
+            <FormControlLabel value="verizon" control={<Radio />} label="Verizon" />
+            <FormControlLabel value="tmobile" control={<Radio />} label="T-Mobile" />
+            <FormControlLabel value="boost" control={<Radio />} label="Boost" />
+            <FormControlLabel value="cricket" control={<Radio />} label="Cricket" />
+        </RadioGroup>
+    </>
+    
+    : null
+*/}

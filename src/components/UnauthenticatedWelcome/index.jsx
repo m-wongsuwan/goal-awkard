@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from 'react-router-dom'
 
-import { useAuth } from '../../hooks/useAuth';
+import { SignIn } from "../SignIn";
+import { About } from "../About";
 
 import Container from '@mui/material/Container';
 import Button from "@mui/material/Button"
@@ -11,35 +12,15 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2'
 
 function UnauthenticatedWelcome() {
-    const { login } = useAuth();
+    // const { login } = useAuth();
 
     return (
         <Container>
-            <Paper elevation={6}>
-                <Box margin={3} padding={3}>
-                    <Typography component='h1' variant='h3'>
-                        About
-                    </Typography>
-                    <Typography component='p' variant='p'>
-                    Lorem ipsum dotem Lorem ipsum dotem Lorem ipsum dotem Lorem ipsum dotem Lorem ipsum dotem Lorem ipsum dotem Lorem ipsum dotem Lorem ipsum dotem Lorem ipsum dotem Lorem ipsum dotem Lorem ipsum dotem Lorem ipsum dotem 
-                    </Typography>
-                </Box>
-            </Paper>
+            <About />
 
             <Grid container spacing={2}>
         
-                <Grid xs={6}>
-                    <Paper elevation={6}>
-                        <Box margin={3} padding={3}>
-                            <Typography component='h1' variant='h3'>
-                                Here to track your goals?
-                            </Typography>
-                            <Button variant='contained' onClick={login}>
-                                Login with Google
-                            </Button>
-                        </Box>
-                    </Paper>
-                </Grid>
+                <SignIn />
 
                 <Grid xs={6}>
                     <Paper elevation={6}>
