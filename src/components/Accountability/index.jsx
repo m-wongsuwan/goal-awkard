@@ -24,6 +24,7 @@ function Accountability(props) {
 
 
     const { userId, secretId } = useParams();
+
     const secretObj = useSecret(userId, secretId)
 
     let dateObj    

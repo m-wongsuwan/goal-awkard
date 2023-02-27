@@ -89,10 +89,69 @@ async function deleteGoal(uid, goalId) {
     }
 }
 
+async function markAchieved(goal) {
+    try {
+        await updateDoc(doc(db, 'users', goal.senderUid, 'goals', goal.docName), {
+            completed: true,
+            completionDate: new Date()
+        })
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+// async function pauseOneOrAllGoals(uid, goalId = null) {
+//     // if no goalId is passed, pause all
+//     if (goalId) {
+//         try {
+//             await updateDoc(doc(db, 'users', uid, 'goals', goalId), {
+//                 paused: true
+//             })
+//         } catch (error) {
+//             console.error(error)
+//         }
+//     } else {
+//         return db.collection
+//     }
+
+
+// }
+
+async function deleteAllGoals(db, uid) {
+    const collectionRef = db.collection('users', uid, 'goals');
+    const query = collectionRef.orderBy().limit(100)
+
+    return new Promise((resolve, reject) => {
+        deleteQueryBatch(query, resolve).catch(reject)
+    })
+}
+
+async function deleteQueryBatch(query, resolve) {
+    const snapshot = await query.get()
+
+    const batchSize = snapshot.size;
+    if (batchSize === 0) {
+        resolve();
+        return;
+    }
+
+    const batch = db.batch();
+    snapshot.docs.forEach((doc) => {
+        batch.delete(doc.ref)
+    })
+    await batch.commit();
+
+    process.nextTick(() => {
+        deleteQueryBatch(query, resolve)
+    })
+}
+
+
 function getGoals(uid, callback) {
     return onSnapshot(
         query(
             collection(db, 'users', uid, 'goals'),
+            // orderBy('timestamp', 'asc')
         ),
         (querySnapshot) => {
             const goals = querySnapshot.docs.map((doc) => ({
@@ -111,9 +170,22 @@ function getSecret(uid, goalId, callback) {
         ),
         (querySnapshot) => {
             // client side never recieves anything but encrypted secretText and due date
-            const secret = {
-                secretText: querySnapshot.data().secretText,
-                checkinDueDate: querySnapshot.data().checkinDueDate
+            // if (querySnapshot.data().checkinDueDate)
+            // console.log(new Date (querySnapshot.data().checkinDueDate.seconds * 1000) - new Date())
+            // console.log(new Date())
+            let secret = {
+                secretText: "",
+                checkinDueDate: querySnapshot.data().checkinDueDate,
+                errorMsg: ""
+            }
+            if (new Date (querySnapshot.data().checkinDueDate.seconds * 1000) - new Date() < 0) {
+                secret = {
+                    secretText: querySnapshot.data().secretText,
+                    checkinDueDate: querySnapshot.data().checkinDueDate,
+                    errorMsg: ""
+                }
+            } else {
+                secret.errorMsg = "Due date has not yet passed."
             }
             callback(secret)
         }
@@ -155,6 +227,7 @@ function getMessages(roomID, callback) {
 // end chat services
 
 export { 
+    deleteAllGoals,
     deleteGoal,
     extendTime, 
     getGoals, 
@@ -162,6 +235,7 @@ export {
     getSecret,
     loginWithGoogle, 
     logOffService,
+    markAchieved,
     sendMessage, 
     submitGoal
  }

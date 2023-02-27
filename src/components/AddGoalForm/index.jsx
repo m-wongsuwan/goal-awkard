@@ -12,11 +12,15 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import FormControlLabel from '@mui/material/FormControlLabel'
+import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
-import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip'
 import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography';
+
+import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 
 
 function AddGoalForm() {
@@ -26,6 +30,7 @@ function AddGoalForm() {
     const initInputs = {
         checkinDueDate: '',
         checkinFrequency: "weekly",
+        completed: false,
         date: '',
         docName: uuidv4(),
         goalTitle: "",
@@ -90,7 +95,8 @@ function AddGoalForm() {
         delete inputsWithDate["senderName"]
         delete inputsWithDate["passphrase"]
 
-        sendEmail()
+        // disabled during testing
+        // sendEmail()
 
         submitGoal(user.uid, inputsWithDate)
         setInputs(initInputs)
@@ -123,20 +129,29 @@ function AddGoalForm() {
                     submit()}
                 }
             >
-                <InputLabel id="goalTitle" variant='filled' sx={{marginBottom: 1}}>Goal Title</InputLabel>
+                <InputLabel id="goalTitle" variant='filled' sx={{marginBottom: 1}}>
+                    What are you working towards?
+                </InputLabel>
+
+                <Tooltip title='Hello there my beautiful baby goirl'>
+                    <IconButton>
+                        <HelpCenterIcon />
+                    </IconButton>
+                </Tooltip>
+
                 <TextField 
                     margin='normal'
                     required
                     fullWidth
                     id='goalTitle'
-                    label="Goal Title"
+                    label="Goal"
                     name='goalTitle'
                     value={inputs.goalTitle}
                     onChange={handleChange}
                     autoFocus
                 />
 
-                <InputLabel variant='filled' sx={{marginBottom: 1}}>Check In Frequency</InputLabel>
+                <InputLabel variant='filled' sx={{marginBottom: 1}}>How often will you check in?</InputLabel>
 
                     <RadioGroup
                         row
@@ -159,45 +174,73 @@ function AddGoalForm() {
                     </RadioGroup>
 
                 
-                <InputLabel variant='filled' sx={{marginBottom: 1}}>Secret Description</InputLabel>
+                <InputLabel variant='filled' sx={{marginBottom: 1}}>
+                    Give us a secret, shame, admission or disclosure
+                </InputLabel>
+
+                <Tooltip title='Whatever you enter here will be encrypted before being sent to the Goal Awkward server. If you ever miss a check in, the person you name below will be able to use the passphrase you provide to see what you entered here.'>
+                    <IconButton>
+                        <HelpCenterIcon />
+                    </IconButton>
+                </Tooltip>
+
                 <TextField 
                     margin='normal'
                     required
                     fullWidth
                     multiline
                     id='secretText'
-                    label="What is your secret shame?"
+                    label="Enter a secret, shame, admission, or disclosure"
                     name='secretText'
                     value={inputs.secretText}
                     onChange={handleChange}                            
                 />
                 
-                <InputLabel variant='filled' sx={{marginBottom: 1}}>Who should we share your secret with?</InputLabel>
+                <InputLabel variant='filled' sx={{marginBottom: 1}}>
+                    Who will you be accountable to?
+                </InputLabel>
+
+                <Tooltip title="This person will receive an email letting them know you're tracking a goal on Goal Awkward.">
+                    <IconButton>
+                        <HelpCenterIcon />
+                    </IconButton>
+                </Tooltip>
+
                 <TextField 
                     margin='normal'
                     required
                     fullWidth
                     id='shareWith'
-                    label="Secret Receiver Name"
+                    label="Name"
                     name='shareWith'
                     value={inputs.shareWith}
                     onChange={handleChange}
                 />
               
-                <InputLabel variant='filled' sx={{marginBottom: 1}}>Secret Receiver Email</InputLabel>
+                <InputLabel variant='filled' sx={{marginBottom: 1}}>
+                    What is their email address?
+                </InputLabel>
                 <TextField 
                     margin='normal'
                     required
                     fullWidth
                     multiline
                     id='shareWithEmail'
-                    label="Secret Receiver Email"
+                    label="Email"
                     name='shareWithEmail'
                     value={inputs.shareWithEmail}
                     onChange={handleChange}                            
                 />
                     
-                <InputLabel variant='filled' sx={{marginBottom: 1}}>Passphrase</InputLabel>
+                <InputLabel variant='filled' sx={{marginBottom: 1}}>
+                    Passphrase
+                </InputLabel>
+                <Tooltip title='This passphrase will be needed to decrypt your self directed blackmail. The person you’ve chosen to be accountable to will receive it along with a link to reveal your secret that only works if you stop logging progress toward your goal. The passphrase is never saved on Goal Awkward’s servers, but remember another person will see it, so don’t use any passwords you use elsewhere on the internet.'>
+                    <IconButton>
+                        <HelpCenterIcon />
+                    </IconButton>
+                </Tooltip>
+
                 <TextField 
                     margin='normal'
                     required

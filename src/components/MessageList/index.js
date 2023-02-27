@@ -35,8 +35,8 @@ function MessageList({ roomID }) {
                     sx={{
                         textAlign: isOwnMessage ? 'right' : 'left',
                         backgroundColor: isOwnMessage ? 'lightBlue' : 'lightGreen',
-                        marginLeft: isOwnMessage ? 15 : null,
-                        marginRight: !isOwnMessage ? 15 : null,
+                        marginLeft: isOwnMessage ? 2 : null,
+                        marginRight: !isOwnMessage ? 2 : null,
                         p: 2,
                         borderRadius: '5px'
                     }}
