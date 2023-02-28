@@ -7,6 +7,7 @@ import { useAuth } from '../../hooks/useAuth'
 import emailjs from 'emailjs-com'
 import { v4 as uuidv4 } from 'uuid'
 import CryptoJS from 'crypto-js'
+import isEmail from 'validator/lib/isEmail';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -26,6 +27,8 @@ import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 function AddGoalForm() {
     const { user } = useAuth()
     const navigate = useNavigate()
+
+    const [emailIsValid, setEmailisValid] = React.useState(false)
 
     const initInputs = {
         checkinDueDate: '',
@@ -48,6 +51,7 @@ function AddGoalForm() {
 
 
     // from_name to_name message
+    // disabled during testing
     function sendEmail() {
         emailjs.sendForm('secret_service', 'send_secret', 'form', 'uA-6EB5WK_WxXR47o')
             .then((result) => {
@@ -65,6 +69,11 @@ function AddGoalForm() {
             ...prevState,
             [name]: value
         }))
+        if (isEmail(inputs.shareWithEmail)) {
+            setEmailisValid(true)
+        } else {
+            setEmailisValid(false)
+        }
     }
 
     function submit() {
@@ -230,7 +239,8 @@ function AddGoalForm() {
                     name='shareWithEmail'
                     value={inputs.shareWithEmail}
                     onChange={handleChange}                            
-                />
+                    />
+                <Typography>{emailIsValid ? "Valid email" : "Please enter a valid email address."}</Typography>
                     
                 <InputLabel variant='filled' sx={{marginBottom: 1}}>
                     Passphrase
