@@ -117,9 +117,9 @@ async function markAchieved(goal) {
 
 // }
 
-async function deleteAllGoals(db, uid) {
-    const collectionRef = db.collection('users', uid, 'goals');
-    const query = collectionRef.orderBy().limit(100)
+async function deleteAllGoals(uid) {
+    const collectionRef = collection(db, 'users', uid, 'goals');
+    const query = collectionRef.orderBy('__name__', 'asc').limit(100)
 
     return new Promise((resolve, reject) => {
         deleteQueryBatch(query, resolve).catch(reject)

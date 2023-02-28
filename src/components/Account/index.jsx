@@ -21,22 +21,6 @@ function Account() {
                     Sign Out
                 </Button>
             </Link>
-            <Box>
-                <Button variant="contained" onClick={() => logOff()}>
-                    Pause All Goals
-                </Button>
-
-                <Button variant="contained" onClick={() => logOff()}>
-                    Delete All Goal Data
-                </Button>
-                
-                <Button variant="contained" onClick={() => deleteAllGoals(user.uid)}>
-                    Delete User Data
-                </Button>
-                
-                
-
-            </Box>
         </>
     )
 }
