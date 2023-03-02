@@ -5,12 +5,14 @@ import { BlockedPage } from '../BlockedPage';
 import { NoLinkAccountability } from '../NoLinkAccountability';
 import { UnauthenticatedWelcome } from '../UnauthenticatedWelcome';
 
+import Box from '@mui/material/Box';
+
 
 
 function UnauthenticatedApp() {
 
     return (
-        <>
+        <Box>
             <BrowserRouter>
                 <Routes>
                     <Route path='/' element={<UnauthenticatedWelcome />} />
@@ -25,7 +27,7 @@ function UnauthenticatedApp() {
                     <Route path='*' element={<BlockedPage page="doesn't exist" />} />
                 </Routes>
             </BrowserRouter>
-        </>
+        </Box>
         
     );
 }

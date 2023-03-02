@@ -81,9 +81,9 @@ async function extendTime(uid, goalId, newDate) {
     }
 }
 
-async function deleteGoal(uid, goalId) {
+async function deleteGoal(goal) {
     try {
-        await deleteDoc(doc(db, 'users', uid, 'goals', goalId))
+        await deleteDoc(doc(db, 'users', goal.senderUid, 'goals', goal.docName))
     } catch (error) {
         console.error(error)
     }
@@ -98,52 +98,6 @@ async function markAchieved(goal) {
     } catch (error) {
         console.error(error)
     }
-}
-
-// async function pauseOneOrAllGoals(uid, goalId = null) {
-//     // if no goalId is passed, pause all
-//     if (goalId) {
-//         try {
-//             await updateDoc(doc(db, 'users', uid, 'goals', goalId), {
-//                 paused: true
-//             })
-//         } catch (error) {
-//             console.error(error)
-//         }
-//     } else {
-//         return db.collection
-//     }
-
-
-// }
-
-async function deleteAllGoals(uid) {
-    const collectionRef = collection(db, 'users', uid, 'goals');
-    const query = collectionRef.orderBy('__name__', 'asc').limit(100)
-
-    return new Promise((resolve, reject) => {
-        deleteQueryBatch(query, resolve).catch(reject)
-    })
-}
-
-async function deleteQueryBatch(query, resolve) {
-    const snapshot = await query.get()
-
-    const batchSize = snapshot.size;
-    if (batchSize === 0) {
-        resolve();
-        return;
-    }
-
-    const batch = db.batch();
-    snapshot.docs.forEach((doc) => {
-        batch.delete(doc.ref)
-    })
-    await batch.commit();
-
-    process.nextTick(() => {
-        deleteQueryBatch(query, resolve)
-    })
 }
 
 
@@ -227,7 +181,6 @@ function getMessages(roomID, callback) {
 // end chat services
 
 export { 
-    deleteAllGoals,
     deleteGoal,
     extendTime, 
     getGoals, 

@@ -77,76 +77,93 @@ function AddGoalForm() {
     }
 
     function submit() {
-        const currentDate = new Date()
-        
-        function returnDueDate(frequency) {
-            if (frequency === 'monthly') {
-                return new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000)
-            } else if (frequency === 'daily') {
-                return new Date(currentDate.getTime() + 1  * 24 * 60 * 60 * 1000)
-            } else {
-                return new Date(currentDate.getTime() + 7  * 24 * 60 * 60 * 1000)
+        if (emailIsValid) {
+            const currentDate = new Date()
+            
+            function calculateDueDate(frequency) {
+                if (frequency === 'monthly') {
+                    return new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000)
+                } else if (frequency === 'daily') {
+                    return new Date(currentDate.getTime() + 1  * 24 * 60 * 60 * 1000)
+                } else {
+                    return new Date(currentDate.getTime() + 7  * 24 * 60 * 60 * 1000)
+                }
+    
             }
-
+    
+            const inputsWithDate = {
+                ...inputs,
+                date: new Date(),
+                checkinDueDate: calculateDueDate(inputs.checkinFrequency)
+            }
+            
+            // ENCRYPTION
+            inputsWithDate.secretText = CryptoJS.AES.encrypt(JSON.stringify(inputsWithDate.secretText), inputs.passphrase).toString()
+            
+            // These key:value pairs are only needed for sending the notification to the secret receiver with emailJS
+            // We specifically wouldn't want to save the passphrase anywhere and the sender's name is included with the google Auth package
+            delete inputsWithDate["senderName"]
+            delete inputsWithDate["passphrase"]
+    
+            sendEmail()
+    
+            submitGoal(user.uid, inputsWithDate)
+            setInputs(initInputs)
+            
+            navigate('/')
+        } else {
+            alert("Please enter a valid email address")
         }
-
-        const inputsWithDate = {
-            ...inputs,
-            date: new Date(),
-            checkinDueDate: returnDueDate(inputs.checkinFrequency)
-        }
-        
-        // ENCRYPTION
-        inputsWithDate.secretText = CryptoJS.AES.encrypt(JSON.stringify(inputsWithDate.secretText), inputs.passphrase).toString()
-        
-        // These key:value pairs are only needed for sending the notification to the secret receiver with emailJS
-        // We specifically wouldn't want to save the passphrase anywhere and the sender's name is included with the google Auth package
-        delete inputsWithDate["senderName"]
-        delete inputsWithDate["passphrase"]
-
-        // disabled during testing
-        // sendEmail()
-
-        submitGoal(user.uid, inputsWithDate)
-        setInputs(initInputs)
-        
-        navigate('/')
 
     }
 
     return(
-        <Container component="main" maxWidth="xs">
-            <Box
-                sx={{
-                    marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center'
-                }}    
-            >
-                <Typography component="h1" variant="h3">
-                    Add Goal
-                </Typography>
-            </Box>
-            
+        <Container component="main" >            
             <Box 
                 id="form"
                 component="form" 
-                sx={{ mt: 1 }} 
+                sx={{ 
+                    display: 'flex',
+                    flexDirection: 'column',
+                    backgroundColor: 'rgba(256, 256, 256, .9)',
+                    p: 3,
+                    mx: 'auto',
+                    alignItems: 'center',
+                    maxWidth: "md",
+                    
+                }} 
                 onSubmit={
                     (e)=>{e.preventDefault()
                     submit()}
                 }
             >
-                <InputLabel id="goalTitle" variant='filled' sx={{marginBottom: 1}}>
-                    What are you working towards?
-                </InputLabel>
+                <Box
+                    sx={{
+                        display: 'flex', 
+                        width: '100%', 
+                        alignItems: 'center', 
+                        justifyContent: 'space-between'
+                    }}
+                >
+                    <InputLabel variant='filled' id="goalTitle"  sx={{marginBottom: 1}}>
+                        What are you working towards?
+                    </InputLabel>
 
-                <Tooltip title='Hello there my beautiful baby goirl'>
-                    <IconButton>
-                        <HelpCenterIcon />
-                    </IconButton>
-                </Tooltip>
+                    
+                    <Tooltip 
+                        title='Check out the S.M.A.R.T. goals page for info on effective goal setting!'
+                        sx={{
+                            position: 'relative',
+                            top: 0,
+                            right: 0
+                        }}
+                    >
+                        <IconButton>
+                            <HelpCenterIcon />
+                        </IconButton>
+                    </Tooltip>
+                </Box>
+
 
                 <TextField 
                     margin='normal'
@@ -160,7 +177,7 @@ function AddGoalForm() {
                     autoFocus
                 />
 
-                <InputLabel variant='filled' sx={{marginBottom: 1}}>How often will you check in?</InputLabel>
+                <InputLabel  sx={{marginBottom: 1}}>How often will you check in?</InputLabel>
 
                     <RadioGroup
                         row
@@ -182,16 +199,25 @@ function AddGoalForm() {
                     </Box>
                     </RadioGroup>
 
-                
-                <InputLabel variant='filled' sx={{marginBottom: 1}}>
-                    Give us a secret, shame, admission or disclosure
-                </InputLabel>
+                <Box
+                    sx={{
+                        display: 'flex', 
+                        width: '100%', 
+                        alignItems: 'center', 
+                        justifyContent: 'space-between'
+                    }}
+                >
+                    <InputLabel variant='filled' sx={{marginBottom: 1}}>
+                        Give us a secret, shame, admission or disclosure
+                    </InputLabel>
 
-                <Tooltip title='Whatever you enter here will be encrypted before being sent to the Goal Awkward server. If you ever miss a check in, the person you name below will be able to use the passphrase you provide to see what you entered here.'>
-                    <IconButton>
-                        <HelpCenterIcon />
-                    </IconButton>
-                </Tooltip>
+                    <Tooltip title='Whatever you enter here will be encrypted before being sent to the Goal Awkward server. The person you name below will only be able to access the encrypted hash and use the passphrase you provide if you miss a check in.'>
+                        <IconButton>
+                            <HelpCenterIcon />
+                        </IconButton>
+                    </Tooltip>
+
+                </Box>
 
                 <TextField 
                     margin='normal'
@@ -205,15 +231,24 @@ function AddGoalForm() {
                     onChange={handleChange}                            
                 />
                 
-                <InputLabel variant='filled' sx={{marginBottom: 1}}>
-                    Who will you be accountable to?
-                </InputLabel>
+                <Box
+                    sx={{
+                        display: 'flex', 
+                        width: '100%', 
+                        alignItems: 'center', 
+                        justifyContent: 'space-between'
+                    }}
+                >
+                    <InputLabel variant='filled' sx={{marginBottom: 1}}>
+                        Who will you be accountable to?
+                    </InputLabel>
 
-                <Tooltip title="This person will receive an email letting them know you're tracking a goal on Goal Awkward.">
-                    <IconButton>
-                        <HelpCenterIcon />
-                    </IconButton>
-                </Tooltip>
+                    <Tooltip title="This person will receive an email letting them know you're tracking a goal on Goal Awkward.">
+                        <IconButton>
+                            <HelpCenterIcon />
+                        </IconButton>
+                    </Tooltip>
+                </Box>
 
                 <TextField 
                     margin='normal'
@@ -226,9 +261,19 @@ function AddGoalForm() {
                     onChange={handleChange}
                 />
               
-                <InputLabel variant='filled' sx={{marginBottom: 1}}>
-                    What is their email address?
-                </InputLabel>
+              <Box
+                    sx={{
+                        display: 'flex', 
+                        width: '100%', 
+                        alignItems: 'center', 
+                        justifyContent: 'space-between'
+                    }}
+                >
+                    <InputLabel  variant='filled' sx={{marginBottom: 1, textAlign: 'left'}}>
+                        What is their email address?
+                    </InputLabel>
+                    <div></div>
+                </Box>
                 <TextField 
                     margin='normal'
                     required
@@ -241,15 +286,25 @@ function AddGoalForm() {
                     onChange={handleChange}                            
                     />
                 <Typography>{emailIsValid ? "Valid email" : "Please enter a valid email address."}</Typography>
-                    
-                <InputLabel variant='filled' sx={{marginBottom: 1}}>
-                    Passphrase
-                </InputLabel>
-                <Tooltip title='This passphrase will be needed to decrypt your self directed blackmail. The person you’ve chosen to be accountable to will receive it along with a link to reveal your secret that only works if you stop logging progress toward your goal. The passphrase is never saved on Goal Awkward’s servers, but remember another person will see it, so don’t use any passwords you use elsewhere on the internet.'>
-                    <IconButton>
-                        <HelpCenterIcon />
-                    </IconButton>
-                </Tooltip>
+                
+                <Box
+                    sx={{
+                        display: 'flex', 
+                        width: '100%', 
+                        alignItems: 'center', 
+                        justifyContent: 'space-between'
+                    }}
+                >
+                    <InputLabel variant='filled' sx={{marginBottom: 1}}>
+                        Passphrase
+                    </InputLabel>
+                    <Tooltip title='This passphrase can be used to decrypt your self directed blackmail if you miss a check in. The passphrase is never saved on Goal Awkward’s servers, but remember another person will see it, so don’t use any passwords you use elsewhere on the internet.'>
+                        <IconButton>
+                            <HelpCenterIcon />
+                        </IconButton>
+                    </Tooltip>
+
+                </Box>
 
                 <TextField 
                     margin='normal'
@@ -308,7 +363,6 @@ function AddGoalForm() {
 
             </Box>
         </Container>
-
     )
 }
 
