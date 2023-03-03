@@ -7,7 +7,7 @@ import Container from '@mui/material/Container'
 function ChatRoom() {
 
     return (
-        <Container>
+        <Container maxWidth='md' sx={{mt: '-20px'}}>
             <MessageList roomID='general'/>
             <MessageInput />
         </Container>

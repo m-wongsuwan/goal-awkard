@@ -1,25 +1,35 @@
 import React from "react";
 
+import { About } from "../About";
+import { Link } from "react-router-dom";
+
+import Button from "@mui/material/Button";
 import Container from "@mui/system/Container";
+import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 
-import { About } from "../About";
 
-import { SignIn } from "../SignIn";
 
 function BlockedPage(props) {
     const { page } = props
 
     return (
         <Container>
-            <Typography
-                component='h1'
-                variant='h3'
-            >
-                {page !== "doesn't exist" ? `You need to sign in to see ${page}.` : "This page doesn't exist. Please sign in."}
-            </Typography>
+            <Paper elevation={6} sx={{p: 3}}>
+                <Typography
+                    component='h1'
+                    variant='h4'
+                >
+                    {page !== "doesn't exist" ? `You need to sign in to ${page}.` : "Looks like this page doesn't exist. Please sign in."}
+                </Typography>
 
-            <SignIn />
+                <Link to='/' style={{textDecoration: 'none'}} >
+                    <Button variant="contained" sx={{my: 3}} size="large">
+                        Return Home
+                    </Button>
+                </Link>
+            </Paper>
+
             <About />
         </Container>
     )

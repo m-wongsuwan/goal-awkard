@@ -4,7 +4,7 @@ const SizingContext = React.createContext();
 
 const SizingProvider = (props) => {
     const drawerWidth = 225
-    const appBarHeight = 76
+    const appBarHeight = 66
 
     const value = { drawerWidth, appBarHeight };
 

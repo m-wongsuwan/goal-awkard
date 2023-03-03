@@ -125,8 +125,7 @@ function AddGoalForm() {
                 sx={{ 
                     display: 'flex',
                     flexDirection: 'column',
-                    backgroundColor: 'rgba(256, 256, 256, .9)',
-                    p: 3,
+                    px: 3,
                     mx: 'auto',
                     alignItems: 'center',
                     maxWidth: "md",
@@ -150,14 +149,7 @@ function AddGoalForm() {
                     </InputLabel>
 
                     
-                    <Tooltip 
-                        title='Check out the S.M.A.R.T. goals page for info on effective goal setting!'
-                        sx={{
-                            position: 'relative',
-                            top: 0,
-                            right: 0
-                        }}
-                    >
+                    <Tooltip title='Check out the S.M.A.R.T. goals page for info on effective goal setting!'>
                         <IconButton>
                             <HelpCenterIcon />
                         </IconButton>

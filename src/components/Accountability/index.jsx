@@ -7,20 +7,16 @@ import CryptoJS from "crypto-js";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container'
-import InputLabel from "@mui/material/InputLabel";
+import Paper from "@mui/material/Paper";
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography';
 
+import { ReceiverLanding } from "../ReceiverLanding";
+import { AccountabilityContext } from "../../context/accountability";
+
 
 function Accountability(props) {
-    // Testing URLs
-    // http://localhost:3000/accountability/ysQMrka0omWRREgJXY5ac7o3Zyv1/df3836af-539a-437b-853f-c595a9c4e417
-    // Passphrase: "Encryption Test"
-    // Past Due
-
-    // http://localhost:3000/accountability/ysQMrka0omWRREgJXY5ac7o3Zyv1/f0ad2775-52b0-4870-94d5-30c99f321087
-    // Passphrase: "Genesys"
-    // Due 2032
+    const { setSecretUnlockDate } = React.useContext(AccountabilityContext)
 
 
     const { userId, secretId } = useParams();
@@ -30,7 +26,7 @@ function Accountability(props) {
     let dateObj    
 
     if (secretObj.checkinDueDate !== undefined) {
-        dateObj = new Date(secretObj.checkinDueDate.seconds * 1000)
+        setSecretUnlockDate(new Date(secretObj.checkinDueDate.seconds * 1000))
     }
 
     const [passphraseInput, setPassphraseInput] = React.useState('')
@@ -47,22 +43,14 @@ function Accountability(props) {
         setDecryptedText(decryptedData)
     }
 
-    function returnDateString(date) {
-        const monthsArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-        return `${monthsArr[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
-    }
-
     function dateHasPassed() {
         return new Date().getTime() - dateObj.getTime() > 0
     }
 
-
     return (
         <Container>
-
-            <Typography>
-                Check in Due Date: {dateObj ? returnDateString(dateObj) : null}
-            </Typography>
+            
+            <ReceiverLanding />
 
             <Box
                 id="form"
@@ -76,10 +64,6 @@ function Accountability(props) {
                     }
                 }}  
             >
-
-                <InputLabel id="passphrase">
-                    Passphrase
-                </InputLabel>
 
                 <TextField 
                     margin='normal'
@@ -103,17 +87,19 @@ function Accountability(props) {
 
             </Box>
 
-            {/* requires prettification */}
+            
             {decryptedText ?
-                <Box>
-                    <Typography>
+                <Paper elevation={6} sx={{p:4}} >
+                    <Typography variant='h6' align="left" sx={{mb:3}}>
+                        Your decrypted text:
+                    </Typography>
+                    <Typography variant='h3'>
                         {decryptedText}
                     </Typography>
-                </Box>
+                </Paper>
             :
                 null
             }
-
         </Container>
     )
 }

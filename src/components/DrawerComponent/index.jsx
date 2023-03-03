@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { AuthContext } from "../../context/auth";
 import { SizingContext } from "../../context/sizing";
 
 import Box from '@mui/material/Box'
@@ -22,12 +21,63 @@ import PsychologyAltIcon from '@mui/icons-material/PsychologyAlt';
 function DrawerComponent() {
     const { drawerWidth, appBarHeight } = React.useContext(SizingContext)
 
+    const sidebarItemsData = [
+        {
+            text: "Home",
+            link: "/",
+            icon: <HomeIcon />
+        },
+        {
+            text: "Add Goal",
+            link: "/addgoal",
+            icon: <EmojiEventsIcon />
+        },
+        {
+            text: "Chat",
+            link: "/chatroom",
+            icon: <ChatIcon />
+        },
+        {
+            text: "SMART Goals",
+            link: "/smartgoals",
+            icon: <PsychologyAltIcon />
+        },
+        {
+            text: "About",
+            link: "/about",
+            icon: <InfoIcon />
+        }
+    ]
+
+    const sidebarItems = sidebarItemsData.map(item => {
+        return (
+            <Link 
+                    to={item.link}
+                    style={{ 
+                        textDecoration: 'none',
+                        color: '#404040'
+                    }}
+                    key={item.text}
+                >
+                    <ListItem>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                {item.icon}
+                            </ListItemIcon>
+                            <ListItemText primary={item.text} />
+                        </ListItemButton>
+                    </ListItem>
+
+                </Link>
+        )
+    })
+
     return (
         <Drawer
             variant='permanent'
             anchor='left'
             sx={{
-                // alignItems: 'left',
+
                 width: drawerWidth,
                 flexShrink: 0,
                 '& .MuiDrawer-paper': {
@@ -37,100 +87,8 @@ function DrawerComponent() {
                 },
                 }}
         >
-            <List
-                sx={{
-                    flex: 1
-                }}
-            >
-                <Link 
-                    to='/'
-                    style={{ 
-                        textDecoration: 'none',
-                        color: '#404040'
-                    }}
-                >
-                    <ListItem>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <HomeIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Home" />
-                        </ListItemButton>
-                    </ListItem>
-
-                </Link>
-
-                <Link 
-                    to='/addgoal'
-                    style={{ 
-                        textDecoration: 'none',
-                        color: '#404040'
-                    }}
-                >
-                    <ListItem>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <EmojiEventsIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Add Goal" />
-                        </ListItemButton>
-                    </ListItem>
-
-                </Link>
-
-                <Link 
-                    to='/chatroom'
-                    style={{ 
-                        textDecoration: 'none',
-                        color: '#404040'
-                    }}
-                >
-                    <ListItem>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <ChatIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Chat" />
-                        </ListItemButton>
-                    </ListItem>
-
-                </Link>
-
-                <Link 
-                    to='/smartgoals'
-                    style={{ 
-                        textDecoration: 'none',
-                        color: '#404040'
-                    }}
-                >
-                    <ListItem>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <PsychologyAltIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="SMART Goals" />
-                        </ListItemButton>
-                    </ListItem>
-
-                </Link>
-
-                <Link 
-                    to='/about'
-                    style={{ 
-                        textDecoration: 'none',
-                        color: '#404040'
-                    }}
-                >
-                    <ListItem>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <InfoIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="About" />
-                        </ListItemButton>
-                    </ListItem>
-
-                </Link>
+            <List sx={{flex: 1}}>
+                {sidebarItems}
             </List>
 
             <Box

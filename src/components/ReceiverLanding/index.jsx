@@ -1,5 +1,9 @@
 import React from 'react';
 
+import { AccountabilityContext } from '../../context/accountability';
+
+import { makeDecryptDateString } from '../../hooks/functions';
+
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List'
@@ -7,7 +11,9 @@ import Link from '@mui/material/Link'
 import ListItem from '@mui/material/ListItem'
 import Paper from '@mui/material/Paper';
 
-function About(props) {
+function ReceiverLanding(props) {
+    const { secretUnlockDate } = React.useContext(AccountabilityContext)
+
     const styles = {
         pStyle: {
             my: 2
@@ -29,18 +35,18 @@ function About(props) {
         <>
             <Paper elevation={6} sx={props.authenticated ? styles.authenticatedStyle : null}>
                 <Box sx={styles.boxStyle}>
-                    <Typography component='h1' variant='h3'>
-                        Need motivation?
+                    <Typography component='h1' variant='h4'>
+                        Someone wants you to hold them accountable
                     </Typography>
-                    <Typography component='h1' variant='h5'>
-                        Goal Awkward can help you achieve your goals!
+                    <Typography component='h1' variant='h6'>
+                        What an honor
                     </Typography>
                     <Typography 
                         component='p' 
                         variant='p'
                         sx={styles.pStyle}
                     >
-                        Sign up for free to start tracking your goals with <b>Goal Awkward</b>. Goal Awkward helps you achieve your goals by threatening to share your deepest, darkest secrets with those you know!
+                        <b>Goal Awkward</b> helps people achieve their goals by threatening to share their deepest, darkest secrets with those they know!
                     </Typography>
 
                     <Typography 
@@ -48,7 +54,7 @@ function About(props) {
                         variant='p'
                         sx={styles.pStyle}
                     >
-                        When you first register a goal with Goal Awkward, you’ll be asked to provide a string of text, the email address of someone you wouldn’t want seeing the string of text you shared, and a passphrase they can use to unlock your secret if you ever stop logging progress towards your goal. The content of the text is up to you; it could be a secret, an embarrassing personal disclosure, admission of guilt in a criminal case, or, perhaps most terrifying, the link to the web diary you kept in high school. The more compromising or embarrassing the text, the more motivation you have to keep making progress towards your goal!
+                        When someone registers a goal on Goal Awkward, they also enter a compromising string of text. A secret, an embarrassing personal disclosure, admission of guilt in a criminal case, or, perhaps most terrifying, a link to the web diary they kept in high school. If a user ever fails to log progress towards their goal in the time frame they set for themself, their secret can be decrypted.
                     </Typography>
 
                     <Typography 
@@ -56,15 +62,7 @@ function About(props) {
                         variant='p'
                         sx={styles.pStyle}
                     >
-                        From there, you just need to log in and confirm you've made progress on your goal every day, week, or month (depending on your preferences)!
-                    </Typography>
-
-                    <Typography 
-                        component='p' 
-                        variant='p'
-                        sx={styles.pStyle}
-                    >
-                        Secrets are encrypted before they ever make it to Goal Awkward’s servers. Delete all data related to your secret at any time. Only the person you specify has both the link and passphrase needed to decrypt and reveal your secret.
+                        The goal setter has until <b>{makeDecryptDateString(secretUnlockDate)}</b> to check in. After which time you can decrypt their "secret."
                     </Typography>
                     
                     {props.authenticated ? null :
@@ -73,7 +71,7 @@ function About(props) {
                             variant='h6'
                             sx={styles.pStyle}
                         >
-                            Ready to harness the power of embarrassment to achieve your goals? Sign up to try it yourself!
+                            Ready to harness the power of embarrassment to achieve your own goals? Sign up and try it out for yourself!
                         </Typography>
 
                     }
@@ -125,4 +123,4 @@ function About(props) {
     )
 }
 
-export { About }
+export { ReceiverLanding }

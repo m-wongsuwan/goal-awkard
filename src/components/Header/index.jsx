@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 
 import { useAuth } from '../../hooks/useAuth'
 
@@ -23,15 +24,18 @@ function Header() {
             }}
         >
             <Toolbar>
-                <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
-                    Goal Awkward
+                <Typography variant="h4" component="div" sx={{textAlign: 'left', flexGrow: 1}} >
+                    <Link to='/' style={{textDecoration: 'none',  color: 'white'}}>
+                        Goal Awkward
+                    </Link>
                 </Typography>
+                    
 
                 <Button 
                     color="inherit"
                     onClick={user ? logOff : login}
                 >
-                    {user ? 'Log Off' : 'Log In'}
+                    {user ? 'Log Off' : 'Log In / Sign Up'}
                 </Button>
 
             </Toolbar>

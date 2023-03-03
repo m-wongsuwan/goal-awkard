@@ -2,6 +2,8 @@ import React from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { useMessages } from '../../hooks/useMessages'
 
+import { SizingContext } from '../../context/sizing'
+
 import Box from '@mui/material/Box'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
@@ -11,6 +13,8 @@ function MessageList({ roomID }) {
     const containerRef = React.useRef(null);
     const { user } = useAuth()
     const messages = useMessages(roomID)
+
+    const {appBarHeight} = React.useContext(SizingContext)
 
     React.useLayoutEffect(() => {
         if (containerRef.current) {
@@ -51,7 +55,7 @@ function MessageList({ roomID }) {
             ref={containerRef}
             className='message-list-container'
             sx={{
-                height: '65vh',
+                height: `${window.innerHeight - appBarHeight - 55}px`,
                 overflow: 'auto',
                 flex: 1
             }}

@@ -5,8 +5,6 @@ import { UnauthenticatedApp } from './components/UnauthenticatedApp';
 
 import Box from '@mui/material/Box'
 import CssBaseline from '@mui/material/CssBaseline';
-import { Header } from './components/Header';
-
 
 function App() {
   const { user } = useAuth()
@@ -14,10 +12,7 @@ function App() {
   return (
     <Box>
       <CssBaseline />
-      <Header />
-      <div className="App"
-        
-      >
+      <div className="App">
         { user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
       </div>
     
