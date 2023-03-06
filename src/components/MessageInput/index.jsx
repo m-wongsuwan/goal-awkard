@@ -49,9 +49,7 @@ function MessageInput() {
                 <Button 
                     variant="contained" 
                     type='submit'
-                    sx={{
-                        height: '100%'
-                    }}
+                    sx={{height: '100%'}}
                 >
                     Send
                 </Button>

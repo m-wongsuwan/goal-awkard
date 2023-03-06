@@ -29,14 +29,7 @@ function MessageList({ roomID }) {
     function Message({ message, isOwnMessage }) {
         const { displayName, text } = message;
         return (
-            <ListItem 
-                className={['message', isOwnMessage && 'own-message'].join(' ')}
-                sx={{
-
-                    // width: '45vw'
-                    // alignSelf: 'flex-end'
-                }}
-            >
+            <ListItem className={['message', isOwnMessage && 'own-message'].join(' ')}>
                 <ListItemText
                     primary={text}
                     secondary={isOwnMessage ? 'You' : displayName}
@@ -59,11 +52,6 @@ function MessageList({ roomID }) {
             component='div'
             ref={containerRef}
             className='message-list-container'
-            sx={{
-                height: `${window.innerHeight - appBarHeight - 55}px`,
-                overflow: 'auto',
-                flex: 1
-            }}
         >
             <List 
                 className='message-list'

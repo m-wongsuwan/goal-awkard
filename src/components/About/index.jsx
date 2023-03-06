@@ -114,12 +114,16 @@ function About(props) {
                         For employment inquiries or to get in touch, check out my <Link href='https://www.linkedin.com/in/m-wongsuwan/' target="_blank" rel="noopener">LinkedIn</Link>.
                     </Typography>
                 </Box>
-
-
             </Paper>
             
             :
                 null}
+            
+            <Box styles={{position: 'relative', bottom: 0}}>
+                 <Typography variant='caption'>
+                    Copyright Morgan Wongsuwan 2023. Goal Icon created by Erix Subyarko from Noun Project   
+                </Typography>
+            </Box>
         </>
         
         

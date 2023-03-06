@@ -18,7 +18,7 @@ function BlockedPage(props) {
                     component='h1'
                     variant='h4'
                 >
-                    {page !== "doesn't exist" ? `You need to sign in to ${page}.` : "Looks like this page doesn't exist. Please sign in."}
+                    {props.accountability ? "You'll need to use the link sent to your email to decrypt a secret." : page !== "doesn't exist" ? `You need to sign in to ${page}.` : "Looks like this page doesn't exist. Please sign in."}
                 </Typography>
 
                 <Link to='/' style={{textDecoration: 'none'}} >

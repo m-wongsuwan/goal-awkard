@@ -13,12 +13,11 @@ function SMARTGoals() {
     const styles = {
         exampleStyle: {
             p: 1,
-            my: 2,
+            my: 3,
             backgroundColor: 'lightGrey'
         },
         pStyle: {
             my: 1,
-            // px: 2,
             display: 'block'
         },
         headingStyle: {
@@ -27,12 +26,12 @@ function SMARTGoals() {
     }
 
     return (
-        <Container maxWidth='md' sx={{mb:3}}>
-            <Paper elevation={5} sx={{py:2}}>
+        <Container maxWidth='lg' sx={{mb:3}}>
+            <Paper elevation={6} sx={{py:2}}>
                 <Box
                     sx={{
                         textAlign: 'left',
-                        px:3
+                        px:5
                     }}
                 >
                     <Typography variant='h3'>
@@ -43,7 +42,7 @@ function SMARTGoals() {
                         href="https://www.atlassian.com/blog/productivity/how-to-write-smart-goals"
                         target="_blank"
                         rel="noopener"
-                        sx={{ml:1}}
+                        sx={{ml:2}}
                     >
                         By Kat Boogaard for Atlassian
                     </Link>
@@ -81,7 +80,16 @@ function SMARTGoals() {
                     <Typography sx={styles.pStyle} variant='p'>
                         In order for a goal to be effective, it needs to be specific. A specific goal answers questions like:
                     </Typography>
-                    <List sx={{px: 2}}>
+                    <List 
+                        sx={{
+                            pl: 5,
+                            listStyle: 'disc',
+                            lineHeight: .7,
+                            '& .MuiListItem-root': {
+                                display: 'list-item',
+                                }
+                        }}
+                    >
                         <ListItem>
                                 What needs to be accomplished?
                         </ListItem>

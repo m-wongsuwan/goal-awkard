@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom'
 
 import { useAuth } from '../../hooks/useAuth'
 
-import { AuthContext } from "../../context/auth";
-import { SizingContext } from "../../context/sizing";
-
 import AppBar from '@mui/material/AppBar'
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+
+import { AuthContext } from "../../context/auth";
+import { SizingContext } from "../../context/sizing";
 
 function Header() {
     const { login } = useAuth();
@@ -19,9 +19,7 @@ function Header() {
     return (
         <AppBar 
             position='fixed'
-            sx={{ 
-                height: `${appBarHeight}px`, 
-            }}
+            sx={{height: `${appBarHeight}px`}}
         >
             <Toolbar>
                 <Typography variant="h4" component="div" sx={{textAlign: 'left', flexGrow: 1}} >

@@ -150,7 +150,7 @@ function makeInProgressRows(arr) {
                     fontWeight: 'bold'
                 }}
             >
-                {row.title}
+                {capitalizeFirstLetter(row.title)}
             </TableCell>
             <TableCell align="right">{makeDateString(new Date(row.setDate * 1000))}</TableCell>
             <TableCell align="center">{capitalizeFirstLetter(row.goal.checkinFrequency)} </TableCell>
@@ -181,4 +181,6 @@ function makeInProgressRows(arr) {
     ))
 }
 
-export { isInCheckinWindow, createData, handleExtend, makeInProgressRows, makeDecryptDateString };
+
+
+export { isInCheckinWindow, capitalizeFirstLetter, createData, handleExtend, makeInProgressRows, makeDecryptDateString };

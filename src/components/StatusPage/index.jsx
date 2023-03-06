@@ -1,13 +1,11 @@
 import React from "react";
 import { Link } from 'react-router-dom'
 
-import { SizingContext } from "../../context/sizing";
+import { deleteGoal } from "../../services/firebase";
 
 import { useAuth } from "../../hooks/useAuth";
 import { useGoals } from "../../hooks/useGoals";
-import { createData, makeInProgressRows } from "../../hooks/functions";
-import { deleteGoal } from "../../services/firebase";
-
+import { createData, makeInProgressRows, capitalizeFirstLetter } from "../../hooks/functions";
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -23,6 +21,8 @@ import Tooltip from '@mui/material/Tooltip';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter'
+
+import { SizingContext } from "../../context/sizing";
 
 
 function StatusPage() {
@@ -77,7 +77,7 @@ function StatusPage() {
     ]
     const tableHeaderCells = tableHeaderData.map(cellData => {
         return (
-            <TableCell align={cellData.alignment} sx={{fontSize: '1.2rem'}} key={cellData.text}>
+            <TableCell align={cellData.alignment} sx={{fontSize: '1.1rem'}} key={cellData.text}>
                     {cellData.text}
                     {cellData.text === 'Check In' ?
                     <Tooltip title="You can check in 24 hours, 2 days, or 1 week before the due date for daily, weekly, and monthly goals respectively.">
@@ -191,7 +191,7 @@ function StatusPage() {
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                                 <TableCell component="th" scope="row">
-                                    {row.title}
+                                    {capitalizeFirstLetter(row.title)}
                                 </TableCell>
                                 <TableCell align="right">{makeDateString(new Date (row.setDate * 1000))}</TableCell>
                                 <TableCell align="right">{makeDateString(new Date(row.completionDate.seconds * 1000))}</TableCell>

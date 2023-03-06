@@ -1,5 +1,7 @@
-import { useAuth } from './hooks/useAuth';
 import './App.css';
+
+import { useAuth } from './hooks/useAuth';
+
 import { AuthenticatedApp } from './components/AuthenticatedApp';
 import { UnauthenticatedApp } from './components/UnauthenticatedApp';
 
@@ -21,6 +23,15 @@ const theme = createTheme({
       main: '#1976d2',
     },
   },
+  typography: {    
+      fontFamily: [
+        '-apple-system',
+        'Lato',
+        'sans-serif',
+        'BlinkMacSystemFont',
+        'Roboto',
+      ].join(','),    
+  }
 });
 
 function App() {
