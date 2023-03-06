@@ -69,7 +69,6 @@ async function submitGoal(uid, goalObject) {
     }
 }
 
-// client could send any date they want. Security rule
 async function extendTime(uid, goalId, newDate) {
     try {
         await updateDoc(doc(db, 'users', uid, 'goals', goalId), {
@@ -93,13 +92,24 @@ async function markAchieved(goal) {
     try {
         await updateDoc(doc(db, 'users', goal.senderUid, 'goals', goal.docName), {
             completed: true,
-            completionDate: new Date()
+            completionDate: new Date(),
+            secretText: 'This goal has been marked complete and the encrypted "secret" hash has been permanently deleted.'
         })
     } catch (error) {
         console.error(error)
     }
 }
 
+async function markShared(userId, docName) {
+    try {
+        await updateDoc(doc(db, 'users', userId, 'goals', docName), {
+            shared: true,
+            sharedDate: new Date()
+        })
+    } catch (error) {
+        console.error(error)
+    }
+}
 
 function getGoals(uid, callback) {
     return onSnapshot(
@@ -124,22 +134,30 @@ function getSecret(uid, goalId, callback) {
         ),
         (querySnapshot) => {
             // client side never recieves anything but encrypted secretText and due date
-            // if (querySnapshot.data().checkinDueDate)
-            // console.log(new Date (querySnapshot.data().checkinDueDate.seconds * 1000) - new Date())
-            // console.log(new Date())
+
             let secret = {
                 secretText: "",
                 checkinDueDate: querySnapshot.data().checkinDueDate,
                 errorMsg: ""
             }
-            if (new Date (querySnapshot.data().checkinDueDate.seconds * 1000) - new Date() < 0) {
+            if ( querySnapshot.data().completed ) {
                 secret = {
                     secretText: querySnapshot.data().secretText,
                     checkinDueDate: querySnapshot.data().checkinDueDate,
-                    errorMsg: ""
+                    errorMsg: "This goal has been marked complete.",
+                    completed: true
                 }
             } else {
-                secret.errorMsg = "Due date has not yet passed."
+                if (new Date (querySnapshot.data().checkinDueDate.seconds * 1000) - new Date() < 0) {
+                    secret = {
+                        secretText: querySnapshot.data().secretText,
+                        checkinDueDate: querySnapshot.data().checkinDueDate,
+                        errorMsg: "",
+                        completed: false
+                    }
+                } else {
+                    secret.errorMsg = "Due date has not yet passed."
+                }
             }
             callback(secret)
         }
@@ -189,6 +207,7 @@ export {
     loginWithGoogle, 
     logOffService,
     markAchieved,
+    markShared,
     sendMessage, 
     submitGoal
  }

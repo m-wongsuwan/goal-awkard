@@ -4,21 +4,23 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
+import Tooltip from '@mui/material/Tooltip'
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import CelebrationIcon from '@mui/icons-material/Celebration';
+import CrisisAlertIcon from '@mui/icons-material/CrisisAlert';
 
 import { extendTime, deleteGoal, markAchieved } from '../services/firebase';
 
 function isInCheckinWindow(goal) {
     if (goal.checkinFrequency === "daily") {
-        return (Math.abs(new Date(goal.checkinDueDate.seconds * 1000 - new Date()))) / 86400000 < 1
+        return ((new Date(goal.checkinDueDate.seconds * 1000 - new Date()))) / 86400000 < 1
     }
     if (goal.checkinFrequency === "weekly") {
-        return (Math.abs(new Date(goal.checkinDueDate.seconds * 1000 - new Date()))) / 86400000 < 2
+        return ((new Date(goal.checkinDueDate.seconds * 1000 - new Date()))) / 86400000 < 2
     }
     if (goal.checkinFrequency === "monthly") {
-        return (Math.abs(new Date(goal.checkinDueDate.seconds * 1000 - new Date()))) / 86400000 < 7
+        return ((new Date(goal.checkinDueDate.seconds * 1000 - new Date()))) / 86400000 < 7
     }
 }
 
@@ -27,52 +29,41 @@ function createData(goal, title, accountabilibuddy, setDate, dueDate, frequency,
 }
 function checkInCell(goal) {
     let freqStr = ""
-    let unlockStr = ""
     switch(goal.checkinFrequency) {
         case "daily":
             freqStr = "today";
-            unlockStr = "24 hours"
             break;
         case "weekly":
             freqStr = "this week";
-            unlockStr = "two days"
             break;
         case "monthly":
             freqStr = "this month";
-            unlockStr = "one week"
             break;
         default:
             console.error("Error Retrieving frequency")
     }
 
-    if (goal.checkinDueDate.seconds - new Date().getTime() < 0) {
-        if (isInCheckinWindow(goal)) {
-            return (
-                   <Button 
-                       size="small"
-                       variant="contained"
-                       onClick={()=> handleExtend(goal)}
-                   >
-                       I made progress {freqStr}
-                   </Button>
-
-            )
-        } else {
-            
-            return (
-                <Button 
-                    size="small"
-                    variant="contained"
-                    disabled
-                >
-                    {`Locked until ${unlockStr} before the due date`}
-                </Button>
-            )
-        }
-
-    }
-    
-            
+    if (isInCheckinWindow(goal)) {
+        return (
+            <Button 
+                size="small"
+                variant="contained"
+                onClick={()=> handleExtend(goal)}
+            >
+                I made progress {freqStr}
+            </Button>
+        )
+    } else {
+        return (
+            <Button 
+            size="small"
+            variant="contained"
+            disabled
+        >
+            Locked
+        </Button>
+        )
+    }      
 }
 function handleExtend(goal) {
     let willExtend = true
@@ -165,7 +156,17 @@ function makeInProgressRows(arr) {
             <TableCell align="center">{capitalizeFirstLetter(row.goal.checkinFrequency)} </TableCell>
             <TableCell align="center">{checkInCell(row.goal)}</TableCell>
             <TableCell align="left">{makeDateString(new Date(row.dueDate * 1000))} {returnCountdown(row.dueDate)}</TableCell>
-            <TableCell align="right">{row.accountabilibuddy}</TableCell>
+            <TableCell align="right">
+                {row.goal.shared ? 
+                    <Tooltip title="This person has accessed your self-blackmail text.">
+                        <IconButton>
+                            <CrisisAlertIcon />
+                        </IconButton>
+                    </Tooltip>
+                         : null
+                        }
+                {row.accountabilibuddy} 
+            </TableCell>
             <TableCell align="center">
                 <IconButton onClick={()=>markAchieved(row.goal)}>
                     <CelebrationIcon fontSize="small" />

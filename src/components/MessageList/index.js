@@ -9,7 +9,11 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 
+import { useTheme } from '@mui/material/styles'
+
 function MessageList({ roomID }) {
+    const theme = useTheme()
+
     const containerRef = React.useRef(null);
     const { user } = useAuth()
     const messages = useMessages(roomID)
@@ -38,7 +42,8 @@ function MessageList({ roomID }) {
                     secondary={isOwnMessage ? 'You' : displayName}
                     sx={{
                         textAlign: isOwnMessage ? 'right' : 'left',
-                        backgroundColor: isOwnMessage ? 'lightBlue' : 'lightGreen',
+                        backgroundColor: isOwnMessage ? theme.palette.primary.main : theme.palette.secondary.light,
+                        color: isOwnMessage ? theme.palette.primary.contrastText : theme.palette.secondary.contrastTex,
                         marginLeft: isOwnMessage ? 12 : null,
                         marginRight: !isOwnMessage ? 12 : null,
                         p: 2,

@@ -43,6 +43,7 @@ function AddGoalForm() {
         senderUid: user.uid,
         shared: false,
         shareWith: "",
+        shareGoal: true,
         shareWithEmail: "",
         secretText: "",
     }
@@ -118,7 +119,7 @@ function AddGoalForm() {
     }
 
     return(
-        <Container component="main" >            
+        <Container component="main" sx={{mb: 4}}>            
             <Box 
                 id="form"
                 component="form" 
@@ -169,7 +170,7 @@ function AddGoalForm() {
                     autoFocus
                 />
 
-                <InputLabel  sx={{marginBottom: 1}}>How often will you check in?</InputLabel>
+                <InputLabel variant='filled' sx={{marginBottom: 1}}>How often will you check in?</InputLabel>
 
                     <RadioGroup
                         row
@@ -252,7 +253,27 @@ function AddGoalForm() {
                     value={inputs.shareWith}
                     onChange={handleChange}
                 />
-              
+                <InputLabel variant='filled' sx={{marginBottom: 1}}>Would you like to let this person know the goal you're working towards?</InputLabel>
+
+                <RadioGroup
+                    row
+                    name='shareGoal'
+                    value={inputs.shareGoal}
+                    onChange={handleChange}
+                >
+                <Box
+                    sx={{
+                        width: '100%',
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+
+                    }}
+                >
+                    <FormControlLabel value={true} control={<Radio />} label="Share" />
+                    <FormControlLabel value={false} control={<Radio />} label="Don't Share" />
+                </Box>
+                </RadioGroup>
+
               <Box
                     sx={{
                         display: 'flex', 
@@ -325,6 +346,7 @@ function AddGoalForm() {
                     value={inputs.senderName}
                     onChange={handleChange}                            
                 />
+
                 <TextField 
                     sx={{display: 'none'}}
                     margin='normal'

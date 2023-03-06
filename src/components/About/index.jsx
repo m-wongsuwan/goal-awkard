@@ -105,7 +105,8 @@ function About(props) {
                         <ListItem>React</ListItem>
                         <ListItem>React Router</ListItem>
                         <ListItem>Material UI Component Library</ListItem>
-                        <ListItem>Google Firebase Authentication and Back End</ListItem>
+                        <ListItem>Material UI Theming</ListItem>
+                        <ListItem>Google Firebase Authentication, Back End, and Deployment</ListItem>
                         <ListItem>Real Time Chat</ListItem>
                         <ListItem>Node packages including CryptoJS and EmailJS</ListItem>
                         </List>

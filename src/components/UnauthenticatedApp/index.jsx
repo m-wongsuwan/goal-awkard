@@ -24,7 +24,7 @@ function UnauthenticatedApp() {
             }}
         >
             <BrowserRouter>
-            <Header />
+                <Header />
                 <Routes>
                     <Route path='/' element={<UnauthenticatedWelcome />} />
                     <Route path='/accountability' element={<NoLinkAccountability />} />

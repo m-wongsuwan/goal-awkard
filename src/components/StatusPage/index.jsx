@@ -19,8 +19,10 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import Tooltip from '@mui/material/Tooltip';
 
 import DeleteIcon from '@mui/icons-material/Delete';
+import HelpCenterIcon from '@mui/icons-material/HelpCenter'
 
 
 function StatusPage() {
@@ -77,6 +79,14 @@ function StatusPage() {
         return (
             <TableCell align={cellData.alignment} sx={{fontSize: '1.2rem'}} key={cellData.text}>
                     {cellData.text}
+                    {cellData.text === 'Check In' ?
+                    <Tooltip title="You can check in 24 hours, 2 days, or 1 week before the due date for daily, weekly, and monthly goals respectively.">
+                        <IconButton>
+                            <HelpCenterIcon /> 
+                        </IconButton>
+                    </Tooltip>
+                    : null
+                    }
             </TableCell>
         )
     })
