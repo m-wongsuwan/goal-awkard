@@ -1,8 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { SizingContext } from "../../context/sizing";
-
 import Box from '@mui/material/Box'
 import Drawer from '@mui/material/Drawer'
 import List from '@mui/material/List';
@@ -18,7 +16,12 @@ import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
 import PsychologyAltIcon from '@mui/icons-material/PsychologyAlt';
 
+import { SizingContext } from "../../context/sizing";
+
+import { useTheme } from '@mui/material/styles'
+
 function DrawerComponent() {
+    const theme = useTheme()
     const { drawerWidth, appBarHeight } = React.useContext(SizingContext)
 
     const sidebarItemsData = [
@@ -55,7 +58,7 @@ function DrawerComponent() {
                     to={item.link}
                     style={{ 
                         textDecoration: 'none',
-                        color: '#404040'
+                        color: theme.palette.text.primary
                     }}
                     key={item.text}
                 >
@@ -77,15 +80,14 @@ function DrawerComponent() {
             variant='permanent'
             anchor='left'
             sx={{
-
+            width: drawerWidth,
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
                 width: drawerWidth,
-                flexShrink: 0,
-                '& .MuiDrawer-paper': {
-                    width: drawerWidth,
-                    mt: `${appBarHeight}px`,
-                    boxSizing: 'border-box',
-                },
-                }}
+                mt: `${appBarHeight}px`,
+                boxSizing: 'border-box',
+            }
+            }}
         >
             <List sx={{flex: 1}}>
                 {sidebarItems}
@@ -94,9 +96,10 @@ function DrawerComponent() {
             <Box
                 sx={{
                     flex: 1,
-                    p: 1,
+                    p: 2,
                     position: 'fixed',
-                    bottom: '0px'
+                    bottom: '0px',
+                    width: drawerWidth
                 }}
             >
                 <Typography variant='caption'>

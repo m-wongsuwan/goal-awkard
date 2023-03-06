@@ -8,7 +8,7 @@ import Tooltip from '@mui/material/Tooltip'
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import CelebrationIcon from '@mui/icons-material/Celebration';
-import CrisisAlertIcon from '@mui/icons-material/CrisisAlert';
+import ErrorIcon from '@mui/icons-material/Error';
 
 import { extendTime, deleteGoal, markAchieved } from '../services/firebase';
 
@@ -160,7 +160,7 @@ function makeInProgressRows(arr) {
                 {row.goal.shared ? 
                     <Tooltip title="This person has accessed your self-blackmail text.">
                         <IconButton>
-                            <CrisisAlertIcon />
+                            <ErrorIcon />
                         </IconButton>
                     </Tooltip>
                          : null

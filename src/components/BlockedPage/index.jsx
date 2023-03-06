@@ -8,8 +8,6 @@ import Container from "@mui/system/Container";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 
-
-
 function BlockedPage(props) {
     const { page } = props
 

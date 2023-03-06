@@ -1,33 +1,25 @@
 import React from 'react';
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-import { SizingContext } from '../../context/sizing';
 
 import { About } from '../About';
 import { AddGoalForm } from '../AddGoalForm';
+import { BlockedPage } from '../BlockedPage';
 import { ChatRoom } from '../Chatroom';
 import { DrawerComponent } from '../DrawerComponent';
+import { Header } from '../Header';
 import { SMARTGoals } from '../SMARTGoals';
 import { StatusPage } from '../StatusPage'
 
-
 import Box from '@mui/material/Box';
-import { Header } from '../Header';
-import { BlockedPage } from '../BlockedPage';
+
+import { SizingContext } from '../../context/sizing';
 
 function AuthenticatedApp() {
     const { appBarHeight, drawerWidth } = React.useContext(SizingContext)
 
     return (
         <Box
-            sx={{
-                // change to context reference
-                mt: `${appBarHeight + 20}px`,
-                ml: `${drawerWidth}px`
-
-            }}
-        >
+            sx={{ mt: `${appBarHeight + 20}px`, ml: `${drawerWidth}px` }}>
             <BrowserRouter>
                 <Header />
                 <DrawerComponent />

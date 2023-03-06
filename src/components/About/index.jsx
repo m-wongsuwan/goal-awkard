@@ -1,11 +1,11 @@
 import React from 'react';
 
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import List from '@mui/material/List'
 import Link from '@mui/material/Link'
+import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 
 function About(props) {
     const styles = {
@@ -96,7 +96,7 @@ function About(props) {
                     <List 
                         sx = {{
                         listStyleType: 'disc',
-                        lineHeight: .8,
+                        lineHeight: .5,
                         pl: 4,
                         '& .MuiListItem-root': {
                         display: 'list-item',

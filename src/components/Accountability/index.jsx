@@ -1,10 +1,10 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
-import { useSecret } from "../../hooks/useSecret";
-import { makeDecryptDateString } from '../../hooks/functions';
-
 import { markShared } from "../../services/firebase";
+
+import { makeDecryptDateString } from '../../hooks/functions';
+import { useSecret } from "../../hooks/useSecret";
 
 import CryptoJS from "crypto-js";
 
@@ -69,36 +69,20 @@ function Accountability(props) {
                     <Typography component='h1' variant='h6' sx={{fontStyle: 'italic'}}>
                         What an honor
                     </Typography>
-                    <Typography 
-                        component='p' 
-                        variant='p'
-                        sx={styles.pStyle}
-                    >
+                    <Typography component='p' variant='p' sx={styles.pStyle}>
                         <b>Goal Awkward</b> helps people achieve their goals by threatening to share their deepest, darkest secrets with those they know!
                     </Typography>
 
-                    <Typography 
-                        component='p' 
-                        variant='p'
-                        sx={styles.pStyle}
-                    >
+                    <Typography component='p' variant='p' sx={styles.pStyle}>
                         When someone registers a goal on Goal Awkward, they also enter a compromising string of text. A secret, an embarrassing personal disclosure, admission of guilt in a criminal case, or, perhaps most terrifying, a link to the web diary they kept in high school. If a user ever fails to log progress towards their goal in the time frame they set for themself, their secret can be decrypted.
                     </Typography>
 
-                    <Typography 
-                        component='p' 
-                        variant='p'
-                        sx={{...styles.pStyle, fontSize: '1.2rem', fontWeight: 'bold'}}
-                    >
+                    <Typography component='p' variant='p' sx={{...styles.pStyle, fontSize: '1.2rem', fontWeight: 'bold'}}                    >
                         {secretObj.completed ? "This goal has been marked complete! The encrypted secret hash has been permanently deleted." : (secretObj.checkinDueDate ? dateHasPassed() ? `This person has missed their check in and you may decrypt their "secret."` : `This goal setter has until ` + makeDecryptDateString(new Date(secretObj.checkinDueDate.seconds * 1000)) + ` to check in.` : "Error retrieving goal and secret data.")}
                     </Typography>
                     
                     {props.authenticated ? null :
-                        <Typography 
-                            component='p' 
-                            variant='h6'
-                            sx={styles.pStyle}
-                        >
+                        <Typography component='p' variant='h6' sx={styles.pStyle}>
                             Ready to harness the power of embarrassment to achieve your own goals? Sign up and try it out for yourself!
                         </Typography>
 
@@ -137,6 +121,7 @@ function Accountability(props) {
                         variant="contained"
                         type="submit"
                         color="primary"
+                        size="large"
                     >
                         Decrypt
                     </Button>
