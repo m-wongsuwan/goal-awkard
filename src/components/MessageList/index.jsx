@@ -52,6 +52,11 @@ function MessageList({ roomID }) {
             component='div'
             ref={containerRef}
             className='message-list-container'
+            sx={{
+                height: `${window.innerHeight - appBarHeight - 55}px`,
+                overflow: 'auto',
+                flex: 1
+            }}
         >
             <List 
                 className='message-list'

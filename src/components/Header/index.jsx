@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { useAuth } from '../../hooks/useAuth'
 
@@ -12,9 +12,15 @@ import { AuthContext } from "../../context/auth";
 import { SizingContext } from "../../context/sizing";
 
 function Header() {
+    const navigate = useNavigate()
     const { login } = useAuth();
     const {logOff, user} = React.useContext(AuthContext)
     const { appBarHeight } = React.useContext(SizingContext)
+
+    function handleLogin() {
+        login()
+        navigate('/')
+    }
 
     return (
         <AppBar 
@@ -31,7 +37,7 @@ function Header() {
 
                 <Button 
                     color="inherit"
-                    onClick={user ? logOff : login}
+                    onClick={user ? logOff : handleLogin}
                 >
                     {user ? 'Log Off' : 'Log In / Sign Up'}
                 </Button>
