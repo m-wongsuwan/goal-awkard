@@ -8,15 +8,15 @@ Goal Awkward is a goal tracking website (currently desktop only) that leverages 
 This is a personal project and portfolio piece by me, Morgan Wongsuwan. I wanted something to really showcase my technical ability and ability to pick up new things, and I think this piece does just that. I also get a hoot out of the idea of blackmailing yourself, though I'm not banking on mass appeal.
 
 #### Demonstrated Skills
-- Material UI
-    - Use of component library
-    - Theming
-    - Customization
 - Google Firebase 
     - Authentication
     - Realtime updates to functional chatroom using onSnapshot document listener
     - Use of NoSQL cloud database
     - Deployment
+- Material UI
+    - Use of component library
+    - Theming
+    - Customization
 - React
 - React Router
 - JavaScript

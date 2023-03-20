@@ -40,7 +40,7 @@ function About(props) {
                         variant='p'
                         sx={styles.pStyle}
                     >
-                        Sign up for free to start tracking your goals with <b>Goal Awkward</b>. Goal Awkward helps you achieve your goals by threatening to share your deepest, darkest secrets with those you know!
+                        Start tracking your goals for free with <b>Goal Awkward</b>. Goal Awkward helps you achieve your goals by threatening to share your deepest, darkest secrets with those you know!
                     </Typography>
 
                     <Typography 

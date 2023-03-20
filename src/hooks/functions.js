@@ -69,11 +69,13 @@ function handleExtend(goal) {
     let willExtend = true
     let daysToAdd = 0
     let alertText = ""
+    let pastDueText = ""
 
     if (goal.checkinFrequency === "daily") {
         if (isInCheckinWindow(goal)) {
             daysToAdd = 1
             alertText = "You've added 24 hours to your check in time."
+            pastDueText = "You were past due. Your new check in is one day from now."
         } else {
             willExtend = false
             alertText = "You can't check more than a day before the check in time."
@@ -83,6 +85,7 @@ function handleExtend(goal) {
         if (isInCheckinWindow(goal)) {
             daysToAdd = 7
             alertText = "You've added one week to your check in time."
+            pastDueText = "You were past due. Your new check in is one week from now."
         } else {
             willExtend = false
             alertText = "You can't check in until two days before the check in time."
@@ -92,6 +95,7 @@ function handleExtend(goal) {
         if (isInCheckinWindow(goal)) {
             daysToAdd = 30
             alertText ="You've added thirty days to your check in time."
+            pastDueText = "You were past due. Your new check in is one month from now."
         } else {
             willExtend = false
             alertText ="You can't check in until seven days before the check in time."
@@ -100,9 +104,18 @@ function handleExtend(goal) {
     
     if (willExtend) {
         const currentDueDate = new Date(goal.checkinDueDate.seconds * 1000)
-        const newDueDate = new Date(currentDueDate.setDate(currentDueDate.getDate() + daysToAdd))
-        extendTime(goal.senderUid, goal.docName, newDueDate)
-        alert(alertText)
+
+        if (currentDueDate - new Date < 0) {
+            const rightNow = new Date()
+            const newDueDate = new Date(rightNow.setDate(rightNow.getDate() + daysToAdd))
+            extendTime(goal.senderUid, goal.docName, newDueDate)
+            alert(pastDueText)
+        } else {
+            const newDueDate = new Date(currentDueDate.setDate(currentDueDate.getDate() + daysToAdd))
+            extendTime(goal.senderUid, goal.docName, newDueDate)
+            alert(alertText)
+        }
+
     }     
 }
 
